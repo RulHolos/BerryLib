@@ -1,0 +1,7 @@
+*.exe
+*.log
+*.dll
+*.ini
+/plugin
+/score
+.vscode

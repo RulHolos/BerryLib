@@ -1,0 +1,48 @@
+Settings = {}
+
+if #lstg.args>=2 then
+	loadstring(lstg.args[2])()
+end
+
+local editor_setting = Settings
+Settings = nil
+
+lstg.FileManager.AddSearchPath("berrylib/")
+lstg.FileManager.AddSearchPath("assets/")
+
+lstg.DoFile("core/API.lua")
+lstg.DoFile("util/string.lua")
+lstg.DoFile("core/userdata.lua")
+lstg.DoFile("core/settings.lua")
+
+LoadConfig()
+SaveConfig()
+
+for k, v in pairs(editor_setting) do
+	Settings[k] = v
+end
+
+if Settings.Game == nil then
+	Settings.Game = "SomeGame" -- Replace this with your game folder for releases.
+end
+
+-- 按需加载启动器包
+
+lstg.FileManager.CreateDirectory("game")
+local zip_path = string.format("game/%s.zip", Settings.Game)
+local dir_path = string.format("game/%s/", Settings.Game)
+local dir_root_script = string.format("game/%s/root.lua", Settings.Game)
+if lstg.FileManager.FileExist(zip_path) then
+	lstg.LoadPack(zip_path)
+elseif lstg.FileManager.FileExist(dir_root_script) then
+	lstg.FileManager.AddSearchPath(dir_path)
+end
+
+lstg.SetSplash(true)
+lstg.SetTitle(Settings.Game)
+lstg.SetWindowed(Settings.Windowed)
+lstg.SetResolution(Settings.ResX, Settings.ResY)
+lstg.SetFPS(60)
+lstg.SetVsync(Settings.VSync)
+lstg.SetSEVolume(Settings.SEVolume / 100)
+lstg.SetBGMVolume(Settings.BGMVolume / 100)
