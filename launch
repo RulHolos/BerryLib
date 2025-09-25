@@ -26,8 +26,6 @@ if Settings.Game == nil then
 	Settings.Game = "SomeGame" -- Replace this with your game folder for releases.
 end
 
--- 按需加载启动器包
-
 lstg.FileManager.CreateDirectory("game")
 local zip_path = string.format("game/%s.zip", Settings.Game)
 local dir_path = string.format("game/%s/", Settings.Game)

@@ -233,6 +233,7 @@ lstg = lstg or {}
 ---@field DoFile fun(path:string, working_dir:string?) Executes the lua script at the given path. Crashes is the file doesn't exist, failed to compile or execute.
 ---@field LoadTextFile fun(path:string, packname:string?) : string Loads a text file and returns its content. If packname is given, will search into a zip.
 ---@field ChangeVideoMode fun(width:integer, height:integer, windowed:boolean, vsync:boolean) : boolean Changes the display parameters. Returns true if success. Otherwise; false, and restore last parameters.
+---@field ChangeVideoMode fun(width:integer, height:integer, video_mode:'windowed'|'fullscreen'|'borderless', vsync:boolean) : boolean Changes the display parameters. FLUX ONLY.
 ---@field EnumResolutions fun() : table<integer, integer, number, number> Enumerates built-in resolutions. Returns a table of <width, height, refresh rate numerator, refresh rate denominator>.
 ---@field EnumGPUs fun() : table<string> Returns a table of the current used GPUs. Why would you want to use this?
 ---@field GetMouseState fun(button:number) : boolean Checks if the mouse button is pressed. 0/1/2 corresponds to left/middle/right.

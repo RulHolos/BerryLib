@@ -1,0 +1,1 @@
+--lstg.MsgBoxWarn("Game was loaded.")
