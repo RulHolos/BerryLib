@@ -11,7 +11,7 @@ lstg.FileManager.AddSearchPath("berrylib/")
 lstg.FileManager.AddSearchPath("assets/")
 
 lstg.DoFile("core/API.lua")
-lstg.DoFile("util/string.lua")
+lstg.DoFile("util/std.lua")
 lstg.DoFile("core/userdata.lua")
 lstg.DoFile("core/settings.lua")
 
