@@ -2,6 +2,7 @@
 -- Load Base Scripts --
 -- ================= --
 
+lstg.DoFile("core/signals.lua")
 lstg.DoFile("core/objects.lua")
 lstg.DoFile("core/resources.lua")
 lstg.DoFile("core/plugin.lua")
@@ -11,6 +12,8 @@ lstg.DoFile("core/input.lua")
 lstg.DoFile("core/scene.lua")
 
 lstg.DoFile("lib/lib.lua")
+---@type lstg.debug.manager
+Include("debug/view.lua")
 
 local quitFlag = false
 function QuitGame()
@@ -34,6 +37,7 @@ function GameInit()
 end
 
 function FrameFunc()
+    ImGuiManager:frame()
     lstg.SetTitle(("%s | %.2f FPS | %d OBJ"):format(Settings.Game, lstg.GetFPS(), lstg.GetnObj()))
     GetInput()
 
@@ -56,6 +60,8 @@ function FrameFunc()
     CollisionCheck(GROUP_ITEM, GROUP_PLAYER)
     lstg.UpdateXY()
 
+    ImGuiManager:layout()
+
     return quitFlag
 end
 
@@ -65,6 +71,7 @@ function RenderFunc()
     SceneManager.current_scene:render()
     lstg.ObjRender()
 
+    ImGuiManager:render()
     lstg.EndScene()
 end
 
