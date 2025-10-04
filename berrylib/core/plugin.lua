@@ -27,7 +27,7 @@ end
 ---@class plugin
 lstg.plugin = {}
 
-local PLUGIN_PATH = "plugin/"
+local PLUGIN_PATH = "plugins/"
 local ENTRY_POINT = "init.lua"
 
 ---@return lstg.plugin.Config.Entry[]
@@ -76,7 +76,7 @@ end
 
 -----------------------------------
 
-local CONFIG_FILE = "plugin.json"
+local CONFIG_FILE = "plugins.json"
 
 ---@class lstg.plugin.Config.Entry
 ---@field name string
