@@ -39,7 +39,7 @@ end
 lstg.SetSplash(true)
 lstg.SetTitle(Settings.Game)
 lstg.SetWindowed(Settings.Windowed)
-lstg.SetResolution(Settings.ResX, Settings.ResY)
+lstg.SetResolution(Settings.XResolution, Settings.YResolution)
 lstg.SetFPS(60)
 lstg.SetVsync(Settings.VSync)
 lstg.SetSEVolume(Settings.SEVolume / 100)

@@ -89,5 +89,7 @@ end
 --------------------------------------
 --- Initialization
 
+lstg.Signals:register("frame", "SceneManager:frame", M.frame, 100)
+
 SceneManager = M
 return M
