@@ -36,11 +36,11 @@ Object = {
     0, 0, 0, 0, 0, 0;
     is_class = true,
     init = function() end,
+    del = function() end, -- I have to put the del callback here because lstg is stupid.
     frame = function() end,
     render = DefaultRenderFunc,
     colli = function(other) end,
     kill = function() end,
-    del = function() end,
 }
 table.insert(All_Classes, Object)
 
@@ -58,11 +58,11 @@ function Class(base)
     local result = { 0, 0, 0, 0, 0, 0 }
     result.is_class = true
     result.init = base.init
+    result.del = base.del
     result.frame = base.frame
     result.render = base.render
     result.colli = base.colli
     result.kill = base.kill
-    result.del = base.del
     result.base = base
 
     table.insert(All_Classes, result)
@@ -72,10 +72,65 @@ end
 function InitAllClasses()
     for _, v in pairs(All_Classes) do
         v[1] = v.init
-        v[2] = v.frame
-        v[3] = v.render
-        v[4] = v.colli
-        v[5] = v.kill
-        v[6] = v.del
+        v[2] = v.del
+        v[3] = v.frame
+        v[4] = v.render
+        v[5] = v.colli
+        v[6] = v.kill
+    end
+end
+
+---@generic C
+---@param class_type C
+---@return C
+function makeInstance(class_type)
+    local instance = {}
+    local metatable = { __index = class_type }
+    setmetatable(instance, metatable)
+    return instance
+end
+
+---@param try function
+---@param catch function?
+---@param finally function?
+---@return any, any?, any?, any?, any?, any?, any?, any?, any?, any?
+function TryCatch(try, catch, finally)
+    assert(try ~= nil, "Try function cannot be nil.")
+
+    local ret = {
+        xpcall(try, function(err)
+            return err .. "\n<=== inner traceback ===>\n" .. debug.traceback() .. "\n<=======================>"
+        end)
+    }
+
+    if ret[1] == true then
+        if finally then
+            finally()
+        end
+        return unpack(ret, 2)
+    else
+        local cret = {}
+
+        if catch then
+            cret = {
+                xpcall(catch, function(err)
+                    return "error in catch block: " .. err .. "\n<=== inner traceback ===>\n" .. debug.traceback() .. "\n<=======================>"
+                end, ret[2])
+            }
+        end
+
+        if finally then
+            finally()
+        end
+
+        if cret == nil then
+            error("Unhandled error: " .. ret[2])
+        else
+            if cret[1] == true then
+                return unpack(cret, 2)
+            else
+                error(cret[2])
+            end
+        end
     end
 end

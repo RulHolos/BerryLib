@@ -2,12 +2,6 @@
 -- Scene System --
 -- ============ --
 
-local function make_instance(C)
-    local I = {}
-    setmetatable(I, { __index = C })
-    return I
-end
-
 ---@class Scene
 local S = {
     name = "default",
@@ -45,9 +39,9 @@ function M.new(name, is_entry_point, is_menu)
     ---@type Scene
     local scene = {
         init = S.init,
-        del = S.del,
-        render = S.render,
         frame = S.frame,
+        render = S.render,
+        del = S.del,
         name = name,
         is_menu = is_menu,
     }
@@ -75,7 +69,7 @@ end
 function M.createNextScene()
     local next_scene = M.next_scene
     M.next_scene = nil
-    M.current_scene = make_instance(next_scene)
+    M.current_scene = makeInstance(next_scene)
     M.current_scene.timer = 0
     M.current_scene:init()
 end

@@ -19,6 +19,7 @@ local function printConfiglist(cfg)
     for i, v in ipairs(cfg) do
         lstg.Print(tostring(i), v.name, v.path, v.directory_mode)
     end
+    lstg.Print(#cfg .. " plugins loaded")
     lstg.Print("====================================")
 end
 
@@ -144,6 +145,8 @@ end
 ---Load all the enabled plugins judging from config.
 ---@param cfg lstg.plugin.Config.Entry[]
 function lstg.plugin.LoadPluginsByConfig(cfg)
+    printConfiglist(cfg)
+
     for _, v in ipairs(cfg) do
         if v.enable then
             lstg.plugin.LoadPlugin(v)

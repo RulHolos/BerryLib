@@ -18,16 +18,6 @@ local Easing = require("berrylib.util.easing")
 ---@field yoyoFlag boolean
 Tween = {}
 
----@generic C
----@param class_type C
----@return C
-local function makeInstance(class_type)
-    local instance = {}
-    local metatable = { __index = class_type }
-    setmetatable(instance, metatable)
-    return instance
-end
-
 function Tween:frame()
     if self.finished then
         return
@@ -65,7 +55,6 @@ end
 ---@param properties table Properties of `target` to tween. Only number values.
 ---@param duration_frames integer Duration in frames
 ---@return lstg.Tween
----@nodiscard
 function Tween.to(target, properties, duration_frames)
     local self = makeInstance(Tween)
     self.target = target
@@ -83,6 +72,8 @@ function Tween.to(target, properties, duration_frames)
     for k, _ in pairs(properties) do
         self.from[k] = target[k]
     end
+
+    TweenManager:add(self)
 
     return self
 end

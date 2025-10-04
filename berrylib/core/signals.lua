@@ -5,16 +5,6 @@
     Signals are a way to implement an event-like system, they're a core part of BerryLib's behavior pattern.
 --]]
 
----@generic C
----@param class_type C
----@return C
-local function makeInstance(class_type)
-    local instance = {}
-    local metatable = { __index = class_type }
-    setmetatable(instance, metatable)
-    return instance
-end
-
 ---@class lstg.Signals
 local Signals = {
     ---@type table<string, lstg.Signals.Entry[]>
