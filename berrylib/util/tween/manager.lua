@@ -22,3 +22,9 @@ function TweenManager:frame()
         end
     end
 end
+
+--- Signals Setup
+
+lstg.Signals:register("frame", "TweenManager:frame", function()
+    TweenManager:frame()
+end)

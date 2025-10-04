@@ -18,10 +18,6 @@ local Easing = require("berrylib.util.easing")
 ---@field yoyoFlag boolean
 Tween = {}
 
-Signals:register("frame", "tween:frame", function()
-    TweenManager:frame()
-end)
-
 ---@generic C
 ---@param class_type C
 ---@return C

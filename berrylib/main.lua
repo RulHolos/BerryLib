@@ -40,7 +40,9 @@ function FrameFunc()
     if SceneManager.next_scene ~= nil then
         SceneManager.next()
     end
-    SceneManager.frame()
+    --SceneManager.frame() -- Keep this or handle it with Signals?
+
+    lstg.Signals:emit("frame")
 
     lstg.ObjFrame()
     lstg.BoundCheck()
@@ -53,8 +55,6 @@ function FrameFunc()
     CollisionCheck(GROUP_NONTJT, GROUP_PLAYER_BULLET)
     CollisionCheck(GROUP_ITEM, GROUP_PLAYER)
     lstg.UpdateXY()
-
-    Signals:emit("frame")
 
     return quitFlag
 end

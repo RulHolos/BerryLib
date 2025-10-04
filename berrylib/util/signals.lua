@@ -16,10 +16,12 @@ local function makeInstance(class_type)
 end
 
 ---@class lstg.Signals
-Signals = {
+local Signals = {
     ---@type table<string, lstg.Signals.Entry[]>
+    ---@private
     entries = {}
 }
+lstg.Signals = Signals
 
 ---@class lstg.Signals.Entry
 ---@field id string?
