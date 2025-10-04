@@ -2,6 +2,6 @@
 *.log
 *.dll
 *.ini
-/plugin
+/plugins
 /score
 .vscode
