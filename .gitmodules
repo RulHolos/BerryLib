@@ -1,0 +1,3 @@
+[submodule "berrylib/doc"]
+	path = berrylib/doc
+	url = https://github.com/RulHolos/LuaSTG-Flux-Documentation.git
