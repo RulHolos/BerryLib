@@ -2,6 +2,12 @@
 -- Load Base Scripts --
 -- ================= --
 
+---@class lstg
+lstg = lstg or {}
+
+lstg.DoFile("core/global.lua")
+lstg.DoFile("core/math.lua")
+lstg.DoFile("core/random.lua")
 lstg.DoFile("core/signals.lua")
 lstg.DoFile("core/objects.lua")
 lstg.DoFile("core/resources.lua")
