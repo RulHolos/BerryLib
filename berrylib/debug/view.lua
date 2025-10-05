@@ -9,10 +9,16 @@ If you wish to add more views, please don't do so in the editor, you'll save tim
 ---@type lstg.debug.manager
 Include("debug/imgui_manager.lua")
 
----- Load all views here ----
+---- All views are automatically loaded here at startup only.               ----
+---- If you wish to add more files at runtime, use `ImGuiManager:addView()` ----
 local patch = "debug.views."
+local path = "berrylib/debug/views/"
 
-ImGuiManager:addView(require(patch .. "UpdateControllerView"))
+local patches = lstg.FileManager.EnumFiles(path, "lua");
+for _, v in ipairs(patches) do
+    local file = string.sub(v[1], string.len(path) + 1, string.len(v[1]) - 4)
+    ImGuiManager:addView(require(patch .. file))
+end
 
 ---- View Definition ----
 ---@class lstg.debug.View
