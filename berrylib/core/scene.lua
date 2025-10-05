@@ -233,9 +233,10 @@ function M.newGroup(name, difficulty_index, item_init, allow_pr)
     return group
 end
 
-function M.next()
+---@param group Scene.Group?
+function M.next(group)
     M.stopCurrentScene()
-    M.createNextScene()
+    M.createNextScene(group)
 end
 
 function M.stopCurrentScene()
