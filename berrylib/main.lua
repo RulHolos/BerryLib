@@ -83,9 +83,9 @@ function RenderFunc()
 end
 
 function FocusLoseFunc()
-
+    lstg.Signals:emit("LoseFocus")
 end
 
 function FocusGainFunc()
-
+    lstg.Signals:emit("GainFocus")
 end

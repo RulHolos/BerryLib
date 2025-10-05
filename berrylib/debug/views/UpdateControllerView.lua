@@ -13,7 +13,7 @@ function UpdateControllerView:setState(v) self.enabled = v end
 
 function UpdateControllerView:frame() end
 function UpdateControllerView:layout()
-    ImGui.Text("yay")
+    ImGui.Text("test")
 end
 
 return UpdateControllerView

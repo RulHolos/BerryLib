@@ -7,6 +7,7 @@ local Easing = require("berrylib.util.easing")
 ---@class lstg.Tween : lstg.object
 ---@field target lstg.object
 ---@field finished boolean
+---@field onFrameFn fun(key, value)
 ---@field onCompleteFn fun()
 ---@field easing fun(t:integer)
 ---@field completed integer
@@ -28,7 +29,9 @@ function Tween:frame()
 
     for key, targetValue in pairs(self.properties) do
         local startValue = self.from[key]
-        self.target[key] = startValue + (targetValue - startValue) * k
+        local value = startValue + (targetValue - startValue) * k
+        self.target[key] = value
+        self.onFrameFn(key, value)
     end
 
     self.timer = self.timer + 1
@@ -65,6 +68,7 @@ function Tween.to(target, properties, duration_frames)
     self.repeatCount = 0
     self.completed = 0
     self.easing = Easing.linear
+    self.onFrameFn = function(key, value) end
     self.onCompleteFn = function() end
     self.finished = false
     self.yoyoFlag = false
@@ -93,6 +97,14 @@ end
 ---@return lstg.Tween self
 function Tween:times(times)
     self.repeatCount = times or 0
+    return self
+end
+
+---Will be called each frame for every properties set to change.
+---@param callback fun(key, value)
+---@return lstg.Tween self
+function Tween:onFrame(callback)
+    self.onFrameFn = callback
     return self
 end
 

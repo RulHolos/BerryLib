@@ -23,6 +23,47 @@ function Include(filename)
     end
 end
 
+ImageList = {}
+ImageSize = {}
+OriginalLoadImage = LoadImage
+
+function LoadImage(img, ...)
+    local arg = { ... }
+    ImageList[img] = arg
+    ImageSize[img] = { arg[4], arg[5] }
+    OriginalLoadImage(img, ...)
+end
+
+function LoadTexture(name, path, mipmap)
+    if CheckRes("tex", name) then
+        return false
+    end
+
+    lstg.LoadTexture(name, path, mipmap)
+
+    return true
+end
+
+function GetImageSize(img)
+    return unpack(ImageSize[img])
+end
+
+function CopyImage(newname, img)
+    if ImageList[img] then
+        LoadImage(newname, unpack(ImageList[img]))
+    elseif img then
+        error("The image \"" .. img .. "\" can't be copied.")
+    else
+        error("Wrong argument #2 (expect string get nil)")
+    end
+end
+
+function LoadImageGroup(prefix, texname, x, y, w, h, cols, rows, a, b, rect)
+    for i = 0, cols * rows - 1 do
+        LoadImage(prefix .. (i + 1), texname, x + w * (i % cols), y + h * (int(i / cols)), w, h, a or 0, b or 0, rect or false)
+    end
+end
+
 ---@param teximgname string
 ---@param filename string
 ---@param mipmap boolean?
@@ -42,6 +83,23 @@ function LoadImageFromFile(teximgname, filename, mipmap, a, b, rect)
     return true
 end
 
+function LoadImageGroupFromFile(texaniname, filename, mipmap, n, m, a, b, rect)
+    LoadTexture(texaniname, filename, mipmap)
+    local w, h = GetTextureSize(texaniname)
+    LoadImageGroup(texaniname, texaniname, 0, 0, w / n, h / m, n, m, a, b, rect)
+end
+
+---@return boolean was_loaded Returns false if the TTF already exists and thus, wasn't loaded.
+function LoadTTF(ttfname, filename, size)
+    if CheckRes("ttf", ttfname) then
+        return false
+    end
+
+    lstg.LoadTTF(ttfname, filename, 0, size)
+
+    return true
+end
+
 -------------------------------------------------
 ---Helpers
 
@@ -53,5 +111,14 @@ function CheckRes(typename, resname)
         error('Invalid resource type name.')
     else
         return lstg.CheckRes(t, resname)
+    end
+end
+
+function EnumRes(typename)
+    local t = ENUM_RES_TYPE[typename]
+    if t == nil then
+        error('Invalid resource type name.')
+    else
+        return lstg.EnumRes(t)
     end
 end

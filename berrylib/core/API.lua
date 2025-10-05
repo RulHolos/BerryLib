@@ -1,8 +1,5 @@
 ---@meta API
 
----@class lstg
-lstg = lstg or {}
-
 -- THlib export these API into global space
 -- THlib 将这些 API 导出到全局
 
@@ -116,8 +113,6 @@ lstg = lstg or {}
 ---| 9 Shader
 ---| 10 Model
 
----@alias BlendMode ""|"mul+alpha"|"mul+add"|"mul+rev"|"mul+sub"|"add+alpha"|"add+add"|"add+rev"|"add+sub"|"alpha+bal"|"mul+min"|"mul+max"|"mul+mul"|"mul+screen"|"add+min"|"add+max"|"add+mul"|"add+screen"|"one"
----@alias lstg.BlendMode BlendMode
 ---@alias ResourcePool "stage"|"global"|"none"
 ---@alias SamplerState "point+wrap"|"point+clamp"|"linear+wrap"|"linear+clamp"
 ---@alias LogLevel

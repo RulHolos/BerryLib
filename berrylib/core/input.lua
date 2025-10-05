@@ -30,6 +30,7 @@ function GetInput()
     end
 end
 
+---@param key KnownKeys
 ---@return boolean
 function KeyIsDown(key)
     return KeyState[key]

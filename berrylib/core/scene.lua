@@ -250,19 +250,19 @@ end
 
 ---@param group Scene.Group?
 function M.createNextScene(group)
-    if not M.next_scene then
-        error("Next scene is undefined. Did you forget to explicitely tell the scene manager what scene or scene group you wanted to load next?")
+    if not M.next_scene and group == nil then
+        error("Next scene is undefined. Did you forget to explicitely tell the scene manager what scene you wanted to load next?")
     end
 
     if M.next_scene.type == "scene" then
         local next_scene = M.next_scene
         M.next_scene = nil
----@diagnostic disable-next-line : assign-type-mismatch cuz idc
+---@diagnostic disable-next-line : assign-type-mismatch
         M.current_scene = next_scene
         M.current_scene.timer = 0
         M.current_scene:init()
     elseif group ~= nil then
----@diagnostic disable-next-line : assign-type-mismatch cuz idc
+---@diagnostic disable-next-line : assign-type-mismatch
         M.current_group = M.groups[group] -- Get the current group or one to get ctx of.
 
         local next_scene

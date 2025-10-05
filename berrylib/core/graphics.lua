@@ -21,7 +21,6 @@ Screen.playfield = {}
 ---@field top number Top-most part of the world
 
 function CreateScreenData()
-    -- 16:9 aspect ratio by default
     Screen.width = 640
     Screen.height = 480
 
@@ -73,7 +72,6 @@ function SetRenderRect(width, height, scrl, scrr, scrb, scrt)
     local t = (height / 2)
 
     SetOrtho(l, r, b, t)
-    --lstg.MsgBoxWarn(l .. " " .. r .. " " .. b .. " " .. t)
 
     setViewportAndScissorRect(
         scrl * Screen.scale,

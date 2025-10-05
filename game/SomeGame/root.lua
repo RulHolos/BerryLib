@@ -3,8 +3,6 @@ function test_obj:init(text)
     self.text = text
     LoadImageFromFile("white", "general/white.png", false)
     LoadImageFromFile("ui_bg", "ui/ui_bg.png", false)
-
-    --lstg.MsgBoxWarn(self.text)
 end
 function test_obj:render()
     SetViewMode("world")

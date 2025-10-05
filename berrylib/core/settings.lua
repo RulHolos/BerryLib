@@ -2,11 +2,23 @@ local cjson = require("cjson")
 ---@diagnostic disable-next-line: undefined-field
 local keyboard = lstg.Input.Keyboard
 
+---@alias KnownKeys
+---| "Up"
+---| "Down"
+---| "Right"
+---| "Left"
+---| "Shoot"
+---| "Bomb"
+---| "Special"
+---| "Focus"
+---| "Snapshot"
+---| "Retry"
+
 Default_Settings = {
     Username = "Player",
     Locale = "en_us",
     TZ = 0,
-    XResolution = 853,
+    XResolution = 640,
     YResolution = 480,
     Windowed = true,
     VSync = true,
