@@ -1,0 +1,15 @@
+{
+    "folders": [
+        {
+            "name": "BerryLib",
+            "path": "."
+        },
+    ],
+    "settings": {
+        "Lua.runtime.version": "LuaJIT",
+        "Lua.workspace.library": [
+            "berrylib/doc"
+        ],
+        "git.openRepositoryInParentFolders": "always",
+    }
+}
