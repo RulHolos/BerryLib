@@ -10,6 +10,10 @@ Its main goal is to be a solid replacement for [THlib](https://github.com/Legacy
 
 Download BerryLib [from the Releases page](https://github.com/RulHolos/BerryLib/releases), extract it in your project folder, at the root of your engine executable.
 
+Or,
+
+You can clone do `git clone --recurse-submodules https://github.com/RulHolos/BerryLib.git` in a cmd at the root of your engine executable, if you have git installed.
+
 And... that's it!
 
 ## 📂 Library Structure
@@ -20,7 +24,7 @@ launch # Required by Sub and Flux to setup the engine for your game<br>
 berrylib/<br>
 ├─ core/ # Core utilities, screen management, plugins, objects, input, signals, ...<br>
 ├─ lib/ # Your game contents, bosses, players, ...<br>
-├─ doc/ # API documentation for Sub and Flux<br>
+├─ doc/ (submodule) # API documentation for Sub and Flux<br>
 ├─ util/ # Utilities like tweens, std, toml, tasks, ...<br>
 └─ main.lua # Second entry point after the launch file<br>
 game/ # Created at first launch, contains all your games data<br>
