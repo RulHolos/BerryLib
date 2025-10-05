@@ -76,7 +76,7 @@ end
 
 function M:initializeCategories()
     for _, v in ipairs(self.view_collection) do
-        if not table.has_ipairs(self.view_categories, v[2].getMenuGroup()) then
+        if not table.has_ivalue(self.view_categories, v[2].getMenuGroup()) then
             table.insert(self.view_categories, v[2].getMenuGroup())
         end
     end

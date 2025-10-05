@@ -41,56 +41,78 @@ string.json_pretty = json_pretty
 
 -------------------------------- Tables
 
----Check if a value exists in the given array.
----@param tbl table
----@param val any
----@return boolean
-function contains_ipairs(tbl, val)
-    for _, v in ipairs(tbl) do
-        if v == val then
+---@generic T
+---@generic V
+---@param t T
+---@param v V
+table.has_ivalue = function(t, v)
+    for _, val in ipairs(t) do
+        if val == v then
             return true
         end
     end
     return false
 end
-table.has_ipairs = contains_ipairs
 
----Check if a value exists in a given table.
----@param tbl table
----@param val any
----@return boolean
-function contains_pairs(tbl, val)
-    for _, v in pairs(tbl) do
-        if v == val then
+---@generic T
+---@generic V
+---@param t T
+---@param v V
+table.has_ikey = function(t, v)
+    for key, _ in ipairs(t) do
+        if key == v then
             return true
         end
     end
     return false
 end
-table.has_pairs = contains_pairs
+
+---@generic T
+---@generic V
+---@param t T
+---@param v V
+table.has_value = function(t, v)
+    for _, val in pairs(t) do
+        if val == v then
+            return true
+        end
+    end
+    return false
+end
+
+---@generic T
+---@generic V
+---@param t T
+---@param v V
+table.has_key = function(t, v)
+    for key, _ in pairs(t) do
+        if key == v then
+            return true
+        end
+    end
+    return false
+end
 
 ---Apply a function to each value in the given array that satisfies a predicate.
 ---@param tbl table
 ---@param predicate fun(v:any, i:integer):boolean
 ---@param action fun(v:any, i:integer)
-function foreach_ipairs(tbl, predicate, action)
+table.foreach_ipairs = function(tbl, predicate, action)
 	for i, v in ipairs(tbl) do
 		if predicate(v, i) then
 			action(v, i)
 		end
 	end
 end
-table.foreach_ipairs = foreach_ipairs
 
 ---Apply a function to each value in the given table that satisfies a predicate.
 ---@param tbl table
 ---@param predicate fun(v:any, k:any):boolean
 ---@param action fun(v:any, k:any)
-function foreach_pairs(tbl, predicate, action)
+table.foreach_pairs = function(tbl, predicate, action)
     for k, v in pairs(tbl) do
         if predicate(v, k) then
             action(v, k)
         end
     end
 end
-table.foreach_pairs = foreach_pairs
