@@ -47,10 +47,11 @@ function FrameFunc()
     lstg.SetTitle(("%s | %.2f FPS | %d OBJ"):format(Settings.Game, lstg.GetFPS(), lstg.GetnObj()))
     GetInput()
 
-    if SceneManager.next_scene ~= nil then
-        SceneManager.next()
+    -- Only call this to initiate the entry_point scene.
+    -- SceneManager:next() will need to be called manually each time after that.
+    if SceneManager.next_scene and SceneManager.current_scene == nil then
+        SceneManager:next()
     end
-    --SceneManager.frame() -- Keep this or handle it with Signals?
 
     lstg.Signals:emit("frame")
 
