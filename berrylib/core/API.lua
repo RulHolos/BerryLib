@@ -306,7 +306,7 @@ lstg = lstg or {}
 
 ---Represents a Vector3. Load using `local vector3 = require("lstg.Vector3")`
 ---@class lstg.Vector3
----@field create fun(x:number, y:number) : lstg.Vector3 Creates a vector3 and returns it.
+---@field create fun(x:number, y:number, z:number) : lstg.Vector3 Creates a vector3 and returns it.
 ---@field length fun(self:lstg.Vector3) : number Returns the length of the vector.
 ---@field angle fun(self:lstg.Vector3) : number Returns the angle of the vector.
 ---@field normalize fun(self:lstg.Vector3) : lstg.Vector3 Changes this vector to it's normalized values.
@@ -316,7 +316,7 @@ lstg = lstg or {}
 
 ---Represents a Vector4. Load using `local vector4 = require("lstg.Vector4")`
 ---@class lstg.Vector4
----@field create fun(x:number, y:number) : lstg.Vector4 Creates a vector4 and returns it.
+---@field create fun(x:number, y:number, z:number, w:number) : lstg.Vector4 Creates a vector4 and returns it.
 ---@field length fun(self:lstg.Vector4) : number Returns the length of the vector.
 ---@field angle fun(self:lstg.Vector4) : number Returns the angle of the vector.
 ---@field normalize fun(self:lstg.Vector4) : lstg.Vector4 Changes this vector to it's normalized values.
