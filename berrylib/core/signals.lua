@@ -7,8 +7,8 @@
 
 ---@class lstg.Signals
 local Signals = {
-    ---@type table<string, lstg.Signals.Entry[]>
     ---@private
+    ---@type table<string, lstg.Signals.Entry[]>
     entries = {}
 }
 lstg.Signals = Signals
@@ -72,9 +72,7 @@ end
 ---@param callback fun(...)?
 function Signals:unregister(key, id, callback)
     local lst = self.entries[key]
-    if not lst then
-        return
-    end
+    if not self:hasListeners(key) then return end
 
     if id == nil then
         assert(callback ~= nil, "Using key mode: Callback must not be nil.")
@@ -93,9 +91,7 @@ end
 ---@param ... any
 function Signals:emit(key, ...)
     local lst = self.entries[key]
-    if not lst then
-        return
-    end
+    if not self:hasListeners(key) then return end
 
     for _, entry in ipairs(lst) do
         entry.callback(...)
@@ -110,9 +106,7 @@ end
 ---@param ... any
 function Signals:emitAsync(key, ...)
     local lst = self.entries[key]
-    if not lst then
-        return
-    end
+    if not self:hasListeners(key) then return end
 
     for _, entry in ipairs(lst) do
         local co = coroutine.create(entry.callback)
