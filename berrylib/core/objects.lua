@@ -90,10 +90,11 @@ function makeInstance(class_type)
     return instance
 end
 
+---@generic T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 ---@param try function
 ---@param catch function?
 ---@param finally function?
----@return any, any?, any?, any?, any?, any?, any?, any?, any?, any?
+---@return T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
 function TryCatch(try, catch, finally)
     assert(try ~= nil, "Try function cannot be nil.")
 

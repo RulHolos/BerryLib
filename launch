@@ -22,7 +22,7 @@ for k, v in pairs(editor_setting) do
 	Settings[k] = v
 end
 
-if Settings.Game == nil then
+if Settings.Game == nil then -- Editor should replace this when testing. No need to do it yourself for testing things.
 	Settings.Game = "SomeGame" -- Replace this with your game folder for releases.
 end
 

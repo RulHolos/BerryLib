@@ -34,13 +34,11 @@ function CreateScreenData()
 end
 
 function CreatePlayfieldData()
-    Screen.playfield.width = 384
-    Screen.playfield.height = 448
+    Screen.playfield.width = 192 * 2
+    Screen.playfield.height = 224 * 2
     Screen.playfield.boundOffset = 32
-    Screen.playfield.xoffset = 0
-    Screen.playfield.yoffset = 0
-
-    SetBound(-(Screen.playfield.width / 2), Screen.playfield.width / 2, -(Screen.playfield.height / 2), Screen.playfield.height / 2)
+    Screen.playfield.xoffset = 32 -- Those two a values are the offset of the playfield in relation to the render context.
+    Screen.playfield.yoffset = 16
 end
 
 -- ============ --
@@ -50,14 +48,42 @@ end
 ---@param mode "background"|"world"|"ui"
 function SetViewMode(mode)
     if mode == "background" then
+        -- Uhhhhh later.
     elseif mode == "world" then
+        local w = Screen.playfield
+        SetRenderRect(w.width, w.height, w.xoffset, w.xoffset + w.width, w.yoffset, w.yoffset + w.height)
     elseif mode == "ui" then
-        SetRenderRect()
+        SetRenderRect(Screen.width, Screen.height, 0, Screen.width, 0, Screen.height)
     else
         error("Unknown ViewMode: '" .. mode .. "'.")
     end
+    lstg.viewmode = mode
 end
 
-function SetRenderRect(l, r, b, t, xoffset, yoffset)
+function SetRenderRect(width, height, scrl, scrr, scrb, scrt)
+---@diagnostic disable-next-line: unused-local, redefined-local
+    local function setViewportAndScissorRect(l, r, b, t)
+        SetViewport(l, r, b, t)
+        SetScissorRect(l, r, b, t)
+    end
 
+    local l = -(width / 2)
+    local r = (width / 2)
+    local b = -(height / 2)
+    local t = (height / 2)
+
+    SetOrtho(l, r, b, t)
+    --lstg.MsgBoxWarn(l .. " " .. r .. " " .. b .. " " .. t)
+
+    setViewportAndScissorRect(
+        scrl * Screen.scale,
+        scrr * Screen.scale,
+        scrb * Screen.scale,
+        scrt * Screen.scale
+    )
+
+    SetFog()
+    SetImageScale(1)
 end
+
+CreateScreenData()

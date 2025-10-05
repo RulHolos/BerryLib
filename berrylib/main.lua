@@ -8,12 +8,12 @@ lstg = lstg or {}
 lstg.DoFile("core/global.lua")
 lstg.DoFile("core/math.lua")
 lstg.DoFile("core/random.lua")
+lstg.DoFile("core/log.lua")
 lstg.DoFile("core/signals.lua")
 lstg.DoFile("core/objects.lua")
 lstg.DoFile("core/resources.lua")
 lstg.DoFile("core/plugin.lua")
 lstg.DoFile("core/graphics.lua")
-lstg.DoFile("core/log.lua")
 lstg.DoFile("core/input.lua")
 lstg.DoFile("core/scene.lua")
 

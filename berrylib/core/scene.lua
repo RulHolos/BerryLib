@@ -127,6 +127,31 @@ function SG:addScene(scene)
 end
 
 ---Adds a branching path for a specific scene in this group.
+---
+---Branching scenes can be used that way:
+---
+---```lua
+---local easy = SceneManager:newGroup("Easy", 1, { life = 4, bombs = 3 }, false)
+---
+---local stage5 = SceneManager.new("5", false, false)
+---easy:addScene(stage5)
+---
+---local stage6a = SceneManager.new("6a", false, false)
+---local stage6b = SceneManager.new("6b", false, false)
+---easy:addScene(stage6a)
+---easy:addScene(stage6b)
+---
+----- Add branching: Stage 5 can go to 6A or 6B
+---easy:addBranch("5", { "6a", "6b" })
+---```
+---
+---And when you need to change the path:
+---```lua
+---SceneManager.current_group:setPath("6a")
+---SceneManager:next()
+---```
+---
+---Will make the stage 5 advance to 6a.
 ---@param from_scene string Branching scene name (without @group suffix)
 ---@param to_scenes string[] Array of possible paths for this scene
 function SG:addBranch(from_scene, to_scenes)
