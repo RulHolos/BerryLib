@@ -11,5 +11,8 @@
             "berrylib/doc"
         ],
         "git.openRepositoryInParentFolders": "always",
+        "Lua.diagnostics.disable": [
+            "lowercase-global"
+        ]
     }
 }
