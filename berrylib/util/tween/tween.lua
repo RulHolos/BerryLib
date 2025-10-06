@@ -60,6 +60,8 @@ end
 ---@return lstg.Tween
 function Tween.to(target, properties, duration_frames)
     local self = makeInstance(Tween)
+    ---@type string|nil
+    self.id = nil
     self.target = target
     self.duration = duration_frames
     self.properties = properties
@@ -80,6 +82,19 @@ function Tween.to(target, properties, duration_frames)
     TweenManager:add(self)
 
     return self
+end
+
+---Tries to get a tween object from a target and an id.
+---@param target lstg.object The target object
+---@param id string Identifier of the tween to get
+---@return lstg.Tween|nil self Returns the tween if found. Otherwise; nil.
+function Tween.get(target, id)
+    for _, v in ipairs(TweenManager.list) do
+        if v.target == target and v.id == id then
+            return v
+        end
+    end
+    return nil
 end
 
 -- ============= --
@@ -118,5 +133,12 @@ end
 ---@return lstg.Tween self
 function Tween:yoyo()
     self.yoyoFlag = true
+    return self
+end
+
+---@param id string Identifier of this tween.
+---@return lstg.Tween self
+function Tween:attachId(id)
+    self.id = id
     return self
 end
