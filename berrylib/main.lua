@@ -50,7 +50,7 @@ function FrameFunc()
     -- Only call this to initiate the entry_point scene.
     -- SceneManager:next() will need to be called manually each time after that.
     if SceneManager.next_scene and SceneManager.current_scene == nil then
-        SceneManager:next()
+        SceneManager.next()
     end
 
     lstg.Signals:emit("frame")
