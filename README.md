@@ -12,7 +12,7 @@ Download BerryLib [from the Releases page](https://github.com/RulHolos/BerryLib/
 
 Or,
 
-You can clone do `git clone --recurse-submodules https://github.com/RulHolos/BerryLib.git` in a cmd at the root of your engine executable, if you have git installed.
+You can clone BerryLib using `git clone --recurse-submodules https://github.com/RulHolos/BerryLib.git` in a cmd at the root of your engine executable, if you have git installed.
 
 And... that's it!
 
