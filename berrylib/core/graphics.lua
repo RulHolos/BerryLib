@@ -60,7 +60,6 @@ function SetViewMode(mode)
 end
 
 function SetRenderRect(width, height, scrl, scrr, scrb, scrt)
----@diagnostic disable-next-line: unused-local, redefined-local
     local function setViewportAndScissorRect(l, r, b, t)
         SetViewport(l, r, b, t)
         SetScissorRect(l, r, b, t)

@@ -3,15 +3,25 @@
 -- ============== --
 --[[
     Signals are a way to implement an event-like system, they're a core part of BerryLib's behavior pattern.
+
+    Signals come in two types: static and dynamic.
+    - Dynamic signals are used to register and emit callbacks calls.
+    - Static signals are used for setting signal keys to values. (ex.SetSignal in THlib)
 --]]
 
 ---@class lstg.Signals
 local Signals = {
     ---@private
     ---@type table<string, lstg.Signals.Entry[]>
-    entries = {}
+    entries = {},
+
+    ---@private
+    ---@type table<string, any>
+    static = {}
 }
 lstg.Signals = Signals
+
+------------- Dynamic Signals
 
 ---@class lstg.Signals.Entry
 ---@field id string?
@@ -146,4 +156,22 @@ end
 function Signals:hasListeners(key)
     local lst = self.entries[key]
     return lst ~= nil and #lst > 0
+end
+
+------------------------ Static signals
+
+---Sets a static signals to a value.
+---@param key string
+---@param value any
+function Signals:setStatic(key, value)
+    self.static[key] = value
+end
+
+---Waits until a static signal has the wanted value.
+---@param key string
+---@param value any
+function Signals:waitForStatic(key, value)
+    while self.static[key] ~= value do
+        Task.Wait(1)
+    end
 end
