@@ -17,6 +17,7 @@ Task.co = {}
 ---@return thread
 function Task.New(target, f)
     if not target.Tasks then
+---@diagnostic disable-next-line: inject-field
         target.Tasks = {}
     end
     local rt = coroutine.create(f)
@@ -41,5 +42,17 @@ function Task.Do(target)
                 Task.co[#Task.co] = nil
             end
         end
+    end
+end
+
+---Makes the current task wait for the specified amount of frames.
+---
+---Must be used in a task context!
+---@param time_in_frames integer? Time to wait in frames
+function Task.Wait(time_in_frames)
+    time_in_frames = time_in_frames or 1
+    time_in_frames = max(1, int(time_in_frames))
+    for _ = 1, time_in_frames do
+        coroutine.yield()
     end
 end
