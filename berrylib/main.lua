@@ -44,7 +44,7 @@ end
 
 function FrameFunc()
     ImGuiManager:frame()
-    lstg.SetTitle(("%s | %.2f FPS | %d OBJ"):format(Settings.Game, lstg.GetFPS(), lstg.GetnObj()))
+    lstg.SetTitle(("%s | %.2f FPS | %d OBJs"):format(Settings.Game, lstg.GetFPS(), lstg.GetnObj()))
     GetInput()
 
     -- Only call this to initiate the entry_point scene.
@@ -75,7 +75,11 @@ end
 function RenderFunc()
     lstg.BeginScene()
 
-    SceneManager.current_scene:render()
+    lstg.Signals:emit("render")
+
+    if SceneManager.current_scene then
+       SceneManager.current_scene:render()
+    end
     lstg.ObjRender()
 
     ImGuiManager:render()
