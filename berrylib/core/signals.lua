@@ -57,7 +57,7 @@ end
 ---@param id string
 ---@param callback fun(...)
 ---@param priority integer? Higher priority callbacks are called first. Default is 0.
-function Signals:once(key, id, callback, priority)
+function Signals:registerOnce(key, id, callback, priority)
     ---@type lstg.Signals.Entry
     local entry = {
         id = id,
@@ -104,8 +104,8 @@ function Signals:emit(key, ...)
     if not self:hasListeners(key) then return end
 
     for _, entry in ipairs(lst) do
-        entry.callback(...)
-        if entry.once then
+        local result = entry.callback(...)
+        if entry.once or result == false then
             self:unregister(key, nil, entry.callback)
         end
     end

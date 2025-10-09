@@ -39,7 +39,6 @@
 ---@field frame fun(...)
 ---@field render fun(...)
 ---@field kill fun(...)
----@alias object lstg.object
 
 ---Represents a color object in ARGB format. Range is [0, 255]
 ---@class lstg.Color
@@ -324,13 +323,6 @@
 ---@field read fun(self:lstg.FileSystemWatcher, files_data:table<string, lstg.FileSystemWatcher.FileAction>) : boolean Fills the given table with data. Returns true if an even was read. Otherwise; false.
 ---@field close fun(self:lstg.FileSystemWatcher) Closes the fsw and destroys it.
 ---@field create fun(path:string) : lstg.FileSystemWatcher Creates a FileSystemWatcher instance.
-
----@alias lstg.FileSystemWatcher.FileAction
----| 1 added
----| 2 removed
----| 3 modified
----| 4 renamed_old_name
----| 5 renamed_new_name
 
 ---Represents a clipboard helper. Load using `local clipboard = require("lstg.Clipboard")`
 ---@class lstg.Clipboard

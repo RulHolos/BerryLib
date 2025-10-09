@@ -63,10 +63,23 @@ function Class(base)
     result.render = base.render
     result.colli = base.colli
     result.kill = base.kill
+---@diagnostic disable-next-line: inject-field
     result.base = base
 
     table.insert(All_Classes, result)
     return result
+end
+
+---Registers custom game objects based on `lstg.object`.
+function lstg.RegisterGameObjectClass(cls)
+    local empty_function = function() end
+    cls[1] = cls.init or empty_function
+    cls[2] = cls.del or empty_function
+    cls[3] = cls.frame or empty_function
+    cls[4] = cls.render or DefaultRenderFunc
+    cls[5] = cls.colli or empty_function
+    cls[6] = cls.kill or empty_function
+    cls.is_class = true
 end
 
 function InitAllClasses()

@@ -455,6 +455,7 @@ TOML.parse = function(toml, options)
 				if obj[buffer] then
 					err('Cannot redefine key "' .. buffer .. '"', true)
 				end
+---@diagnostic disable-next-line: need-check-nil
 				obj[buffer] = v.value
 			end
 

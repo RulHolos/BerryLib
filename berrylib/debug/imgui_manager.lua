@@ -1,6 +1,6 @@
 local imgui_exists, imgui = pcall(require, "imgui")
 if not imgui_exists then
-    warn("!! ImGui was invoked but doesn't exist !!")
+    Print("!! ImGui was invoked but doesn't exist !!")
 end
 ImGui = imgui.ImGui
 
