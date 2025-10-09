@@ -191,7 +191,7 @@ local M = {
     ---@type Scene.Group|nil
     current_group = nil,
     ---@type Scene|Scene.Group Can be either a scene or a scene group.
-    next_scene = S,
+    next_scene = nil,
     ---If true, will transfer the resource pool.
     keep_resources = false,
 }
@@ -247,10 +247,14 @@ function M.stopCurrentScene()
     if not M.keep_resources then
         lstg.RemoveResource("stage")
     end
+
+    lstg.Signals:emit("scene:end", M.current_scene)
 end
 
 ---@param group Scene.Group?
 function M.createNextScene(group)
+    lstg.SetResourceStatus("stage")
+
     if not M.next_scene and group == nil then
         error("Next scene is undefined. Did you forget to explicitely tell the scene manager what scene you wanted to load next?")
     end

@@ -5,7 +5,6 @@
 ---@class lstg
 lstg = lstg or {}
 
-lstg.DoFile("core/global.lua")
 lstg.DoFile("core/math.lua")
 lstg.DoFile("core/random.lua")
 lstg.DoFile("core/log.lua")
@@ -16,6 +15,7 @@ lstg.DoFile("core/plugin.lua")
 lstg.DoFile("core/graphics.lua")
 lstg.DoFile("core/input.lua")
 lstg.DoFile("core/scene.lua")
+lstg.DoFile("core/global.lua")
 
 lstg.DoFile("lib/lib.lua")
 ---@type lstg.debug.manager
@@ -36,10 +36,7 @@ function GameInit()
 
     InitAllClasses()
 
-    if SceneManager.next_scene == nil then
-        error("No entry point scene defined.")
-    end
-    lstg.SetResourceStatus("stage")
+    lstg.SetResourceStatus("global")
 end
 
 function FrameFunc()
@@ -49,7 +46,7 @@ function FrameFunc()
 
     -- Only call this to initiate the entry_point scene.
     -- SceneManager:next() will need to be called manually each time after that.
-    if SceneManager.next_scene and SceneManager.current_scene == nil then
+    if SceneManager.next_scene ~= nil and SceneManager.current_scene == nil then
         SceneManager.next()
     end
 
