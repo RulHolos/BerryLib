@@ -11,11 +11,9 @@
 
 ---@class lstg.Signals
 local Signals = {
-    ---@private
     ---@type table<string, lstg.Signals.Entry[]>
     entries = {},
 
-    ---@private
     ---@type table<string, any>
     static = {}
 }
