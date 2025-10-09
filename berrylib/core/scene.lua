@@ -106,7 +106,7 @@ local SG = {
 
     current_scene_index = 1,
 
-    ---@type table<string, string[]> -- Eg: { ["stage5@Normal"] = { "stage6a@Normal", "stage6b@Normal" } }
+    ---@type table<string, string[]> -- Eg: { ["stage5"] = { "stage6a", "stage6b" } }
     branches = {},
     ---@type string|nil -- Chosen path name for current context. Will be cleared after calling :next()
     path_choice = nil
@@ -290,12 +290,21 @@ function M.createNextScene(group)
     end
 end
 
+---@private
 function M.frame()
     if M.current_scene == nil then return end
 
     Task.Do(M.current_scene)
     M.current_scene:frame()
     M.current_scene.timer = M.current_scene.timer + 1
+end
+
+function M.render()
+    if M.current_scene == nil then return end
+
+    SetViewMode("world")
+    M.current_scene:render()
+    SetViewMode("ui") -- Maybe remove this
 end
 
 --------------------------------------
