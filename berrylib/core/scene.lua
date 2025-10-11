@@ -26,14 +26,13 @@ Then, you call SG:new(), it will automatically register scenes of this group.
 The process looks like this:
 ```lua
 last_scene_group = SceneManager:newGroup("Easy", 1, { life = 4, bombs = 3 }, false)
-last_scene = SceneManager:new("1", false, false)
+last_scene = last_scene_group:newScene("1")
 last_scene.init = function()
     -- Do something
 end
 last_scene.del = function()
     -- oh no I'm dead
 end
-last_scene_group:addScene(last_scene)
 ```
 
 In this example, last_scene will have necessary values populated when added to last_scene_group.
@@ -54,13 +53,11 @@ Branching scenes can be used that way:
 ```lua
 local easy = SceneManager:newGroup("Easy", 1, { life = 4, bombs = 3 }, false)
 
-local stage5 = SceneManager.new("5", false, false)
+local stage5 = easy:newScene("5")
 easy:addScene(stage5)
 
-local stage6a = SceneManager.new("6a", false, false)
-local stage6b = SceneManager.new("6b", false, false)
-easy:addScene(stage6a)
-easy:addScene(stage6b)
+local stage6a = easy:newScene("6a")
+local stage6b = easy:newScene("6b")
 
 -- Add branching: Stage 5 can go to 6A or 6B
 easy:addBranch("5", { "6a", "6b" })
@@ -177,6 +174,26 @@ function SG:reset()
     self.current_scene_index = 1
 end
 
+---@param name string
+---@return Scene
+function SG:newScene(name)
+    ---@type Scene
+    local scene = {
+        type = "scene",
+        init = S.init,
+        frame = S.frame,
+        render = S.render,
+        del = S.del,
+        name = name,
+        is_menu = false,
+        timer = 0,
+    }
+
+    scene = self:addScene(scene)
+    SceneManager.scenes[scene.name] = scene
+    return scene
+end
+
 --------------------------------------
 --- Scene Manager
 
@@ -220,26 +237,34 @@ function M.new(name, is_entry_point, is_menu)
     return scene
 end
 
+---@param name string Name of the group.
+---@param difficulty_index integer Difficulty index of this group. Used for score calculation.
+---@param is_entry_point boolean
+---@param item_init table?
+---@param allow_pr boolean?
 ---@return Scene.Group @The created group. Used to add stage and stage definitions.
-function M.newGroup(name, difficulty_index, item_init, allow_pr)
+function M.newGroup(name, difficulty_index, is_entry_point, item_init, allow_pr)
     local group = makeInstance(SG)
     group.name = name
     group.diff_index = difficulty_index
-    group.item_init = item_init
-    group.allow_pr = allow_pr
+    group.item_init = item_init or {}
+    group.allow_pr = allow_pr or true
 
     M.groups[name] = group
+    if is_entry_point then
+        M.next_scene = group
+    end
 
     return group
 end
 
----@param group Scene.Group?
-function M.next(group)
+function M.next()
     M.stopCurrentScene()
-    M.createNextScene(group)
+    M.createNextScene()
 end
 
 function M.stopCurrentScene()
+    local destroying_scene = M.current_scene
     if M.current_scene == nil then return end
 
     M.current_scene:del()
@@ -249,14 +274,15 @@ function M.stopCurrentScene()
     end
 
     lstg.Signals:emit("scene:end", M.current_scene)
+
+    return destroying_scene
 end
 
----@param group Scene.Group?
-function M.createNextScene(group)
+function M.createNextScene()
     lstg.SetResourceStatus("stage")
 
-    if not M.next_scene and group == nil then
-        error("Next scene is undefined. Did you forget to explicitely tell the scene manager what scene you wanted to load next?")
+    if not M.next_scene then
+        error("Next scene is undefined. Did you forget to explicitely tell the scene manager what scene or scene group you wanted to load next?")
     end
 
     if M.next_scene.type == "scene" then
@@ -266,29 +292,32 @@ function M.createNextScene(group)
         M.current_scene = next_scene
         M.current_scene.timer = 0
         M.current_scene:init()
-    elseif group ~= nil then
+    elseif M.next_scene.type == "group" then -- M.next_scene is the same object during the entire lifetime of the group.
 ---@diagnostic disable-next-line : assign-type-mismatch
-        M.current_group = M.groups[group] -- Get the current group or one to get ctx of.
+        M.current_group = M.groups[M.next_scene.name] -- Get the current group or one to get ctx of.
 
         local next_scene
-        if group.path_choice then
-            next_scene = group.path_choice
-            group.path_choice = nil
+        if M.current_group.path_choice ~= nil then
+            next_scene = M.current_group.path_choice
+            M.current_group.path_choice = nil
         else
-            next_scene = group.scenes[group.current_scene_index]
+            next_scene = M.current_group.scenes[M.current_group.current_scene_index]
         end
 
         if next_scene ~= nil then
+            ---@type Scene
             local scene = M.scenes[next_scene]
             if scene == nil then return end
 
             M.current_scene = scene
             M.current_scene.timer = 0
             M.current_scene:init()
-        end
 
-        -- For next time it's used.
-        M.current_group.current_scene_index = M.current_group.current_scene_index + 1
+            -- For next time it's used.
+            M.current_group.current_scene_index = M.current_group.current_scene_index + 1
+        else
+            error("There is no next scene in the current group. Did you forget to set a new scene or group to switch to?")
+        end
     else
         error("Undefined group type.")
     end

@@ -31,12 +31,16 @@ end
 -- ======================== --
 
 function GameInit()
+    InitAllClasses()
+
+    lstg.SetResourceStatus("stage")
+
     Include("root.lua")
     lstg.plugin.DispatchEvent("afterGame")
 
-    InitAllClasses()
-
-    lstg.SetResourceStatus("global")
+    if SceneManager.next_scene == nil then
+        error("No entry point scene defined.")
+    end
 end
 
 function FrameFunc()
