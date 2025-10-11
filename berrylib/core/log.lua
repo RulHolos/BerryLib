@@ -15,6 +15,9 @@ end
 
 function lstg.MsgBoxWarn(msg)
     local ret = lstg.MessageBox("Warning", tostring(msg), 49)
+    if ret == 2 then
+        QuitGame()
+    end
 end
 
 function lstg.MsgBoxError(msg, title, exit)
