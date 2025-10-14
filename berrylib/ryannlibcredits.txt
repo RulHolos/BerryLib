@@ -1,0 +1,50 @@
+Ryannlib, version 1.03
+
+Terms of use: Non-commercial/personal use
+Ryannlib for LuaSTGSub/aex+ (tested on v0.8.21-beta)
+
+To "install" it, simply merge this Library folder with the one inside /game in LuaSTGExPlus.
+If it asks to replace files, replace them all.
+
+Thanks for using Ryannlib! This pack took a long time for me to complete because of all the missing assets that I couldn't produce by myself. I might release new versions of this pack depending if some people want some changes (for example, I didn't change backgrounds (with the exception of temple and spellcard) nor fonts (but they should be fine)) or someone reaches out to me involving an issue. Here's a credits list of everyone involved or sources from assets! 
+
+Ryann1908/Hiro - Everything that isn't mentioned here
+
+People:
+Roka Enzaki - Player score theme
+Neck Logo/Nick Logan - Boss Magic Circle, Star Bullets, Cherry.png/Petal 
+Kurenai - Pause jingle
+DD - Player sprites + some shots (https://www.pixiv.net/en/users/4650367/artworks)
+Osabisi - SFX (http://osabisi.sakura.ne.jp/m2/)
+Mr. Grn - Images (http://grndmf.blog.fc2.com/blog-entry-1.html)
+Aby/Big Bee - Big Power/Full Power item graphics and HUD Life and Bomb sprites
+
+Sites:
+SDA Nagoya CUACJP (patterns): http://www.sda.nagoya-cu.ac.jp/sa08m13/images/top.html
+DOGA.JP (Master spark base image): http://coolier.net/th_up4/index.php?id=5137
+Paradise of Boundaries (Last word theme) [by Kurenai]: https://www.youtube.com/watch?v=BvZFscjki-g
+maoudamashii (SFX): https://maoudamashii.jokersounds.com/
+SE.dinc (?) [SFX]: https://coolier.net/th_up4/img/th4_2637.zip
+Touhou Danmakufu wiki (SFX): http://danmakufu.wiki.fc2.com/wiki/%E7%B4%A0%E6%9D%90%E3%83%AA%E3%83%B3%E3%82%AF
+貴方が作る東方STG～東方弾幕風 8の880 様 (fairy sprites): http://jbbs.livedoor.jp/bbs/read.cgi/computer/41116/1221395825/880
+11-221(諏訪子コピーの人) 様 (yin-yangs): danmakuhu_11_221@yahoo.co.jp
+Freesound.org (SFX): https://freesound.org/people/philsapphire/sounds/256452/
+
+Special Thanks:
+Sources from Sapphire Panlogism, Spirits in Memetic Paradise, Taisei and Kaisendo
+Luminous_DNH
+
+Ryannlib is a THlib asset replacement package mounted by Ryann1908. For inquiries, please reach out to me.
+Contact me at:
+Twitter - @RyannThi
+Discord - @ryann1908
+
+--- Changelog
+
+1.03: Changed amulet sprite
+
+1.02: Changed player score music (thanks Roka Enzaki) and fixed glitchy eff_magicsquare omiga
+
+1.01: Changed a bullet graphic and the bullet spawn delay effect
+
+1.00: Initial release
