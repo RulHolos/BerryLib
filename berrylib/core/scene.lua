@@ -258,6 +258,17 @@ function M.newGroup(name, difficulty_index, is_entry_point, item_init, allow_pr)
     return group
 end
 
+---@param name string Name of the group to go to.
+function M.goToGroup(name)
+    local group = M.groups[name]
+    if not group then
+        error(("Scene group '%s' doesn't exist."):format(name))
+    end
+
+    M.next_scene = group
+    M.next()
+end
+
 function M.next()
     M.stopCurrentScene()
     M.createNextScene()
@@ -279,6 +290,7 @@ function M.stopCurrentScene()
 end
 
 function M.createNextScene()
+    local got_loaded = false
     lstg.SetResourceStatus("stage")
 
     if not M.next_scene then
@@ -292,6 +304,7 @@ function M.createNextScene()
         M.current_scene = next_scene
         M.current_scene.timer = 0
         M.current_scene:init()
+        got_loaded = true
     elseif M.next_scene.type == "group" then -- M.next_scene is the same object during the entire lifetime of the group.
 ---@diagnostic disable-next-line : assign-type-mismatch
         M.current_group = M.groups[M.next_scene.name] -- Get the current group or one to get ctx of.
@@ -315,11 +328,16 @@ function M.createNextScene()
 
             -- For next time it's used.
             M.current_group.current_scene_index = M.current_group.current_scene_index + 1
+            got_loaded = true
         else
             error("There is no next scene in the current group. Did you forget to set a new scene or group to switch to?")
         end
     else
         error("Undefined group type.")
+    end
+
+    if got_loaded then
+        lstg.Signals:emit("scene:start", M.current_scene)
     end
 end
 
