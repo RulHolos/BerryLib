@@ -6,6 +6,7 @@ In C#, `berry.boss.boss_manager` would be considered an abstract class but I hav
 ]]
 
 local boss = require("berrylib.lib.boss.boss")
+local card_system = require("berrylib.lib.boss.boss_card_system")
 
 ---@class berry.boss.boss_manager : lstg.object
 local M = Class(Object)
@@ -15,10 +16,15 @@ function M:init()
     lstg.Signals:setStatic("BossEnded", false)
 
     self.addBoss = M.addBoss
+    self.getBossFromIndex = M.getBossFromIndex
+    self.getBossFromName = M.getBossFromName
+    self.foreachBoss = M.foreachBoss
+    self.scope = M.scope
+    self.dealDamage = M.dealDamage
 
     ---@type berry.boss.boss[]
     self.bosses = {}
-    self.card_system = nil -- TODO
+    self.card_system = card_system.create(self)
     self.boss_ui = nil -- TODO
 
     ---@type integer Number of boss objects currently taking damage (dmg / hit_number)
@@ -106,5 +112,31 @@ end
 ---Deals damage to the current spell card. Is called by every bosses when hit.
 ---@param dmg number The number of damage taken by one boss. Will be devided by all currently hit bosses count for real damage.
 function M:dealDamage(dmg)
+	if self.card_system.current_card == nil then
+		return
+	end
+	if self.card_system.current_card.protect_time ~= 0 or self.card_system.current_card.timeout then
+		return
+	end
 
+	assert(self.hit_number ~= 0, "self.hit_number can't be 0.")
+	local dmg_taken = dmg / self.hit_number
+
+	lstg.var.score = lstg.var.score + (8 * dmg_taken) -- Before reduction
+
+	if self.card_system.current_card.dmg_reduction_time ~= 0 then
+		dmg_taken = dmg_taken / 3
+	end
+	self.card_system.current_card.hp =
+		clamp(self.card_system.current_card.hp - dmg_taken, 0, self.card_system.current_card.max_hp)
+
+	self.hit_number = 0 -- Reset for next frame
 end
+
+function M:del()
+    lstg.Signals:setStatic("BossEnded", true)
+end
+
+lstg.RegisterGameObjectClass(M)
+
+return M

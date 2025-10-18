@@ -290,6 +290,8 @@
 ---------------------------------------
 
 ---Represents a Vector2. Load using `local vector2 = require("lstg.Vector2")`
+---
+---Note: Vectors are not serializable.
 ---@class lstg.Vector2
 ---@field create fun(x:number, y:number) : lstg.Vector2 Creates a vector2 and returns it.
 ---@field length fun(self:lstg.Vector2) : number Returns the length of the vector.
@@ -299,6 +301,7 @@
 ---@field dot fun(self:lstg.Vector2, other:lstg.Vector2) : number Returns the dot product of this and another vector.
 
 ---Represents a Vector3. Load using `local vector3 = require("lstg.Vector3")`
+---Note: Vectors are not serializable.
 ---@class lstg.Vector3
 ---@field create fun(x:number, y:number, z:number) : lstg.Vector3 Creates a vector3 and returns it.
 ---@field length fun(self:lstg.Vector3) : number Returns the length of the vector.
@@ -307,8 +310,9 @@
 ---@field normalized fun(self:lstg.Vector3) : lstg.Vector3 Copy this vector and create a new one with normalized values.
 ---@field dot fun(self:lstg.Vector3, other:lstg.Vector3) : number Returns the dot product of this and another vector.
 
-
 ---Represents a Vector4. Load using `local vector4 = require("lstg.Vector4")`
+---
+---Note: Vectors are not serializable.
 ---@class lstg.Vector4
 ---@field create fun(x:number, y:number, z:number, w:number) : lstg.Vector4 Creates a vector4 and returns it.
 ---@field length fun(self:lstg.Vector4) : number Returns the length of the vector.
