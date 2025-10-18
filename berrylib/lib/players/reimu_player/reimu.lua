@@ -7,6 +7,9 @@ ReimuPlayer = Class(PlayerSystem)
 
 function ReimuPlayer:init(slot)
     PlayerSystem.init(self, slot)
+    -----------------------------------------
+    LoadTexture("reimu_player", "players/reimu_player/reimu.png")
+    -----------------------------------------
 
     self.name = "Reimu"
     self.A, self.B = 0.5, 0.5

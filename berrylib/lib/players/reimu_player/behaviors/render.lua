@@ -7,8 +7,6 @@ M.name = "Render"
 function M:init()
     base_render.init(self)
     ----------------
-    LoadTexture("reimu_player", "players/reimu_player/reimu.png")
-    ----------------
     LoadImageGroup("reimu_player", "reimu_player", 0, 0, 32, 48, 8, 3, 0.5, 0.5, false)
 
     ---@type string[]

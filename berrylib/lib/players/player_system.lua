@@ -9,6 +9,9 @@ function PlayerSystem:init(index)
     index = index or 1
     self.index = index
 
+    self.layer = LAYER_PLAYER
+    self.group = GROUP_PLAYER
+
     self.name = ""
     self.protect = 0
     self.scale = 1
