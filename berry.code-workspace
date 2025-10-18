@@ -12,7 +12,8 @@
         ],
         "git.openRepositoryInParentFolders": "always",
         "Lua.diagnostics.disable": [
-            "lowercase-global"
+            "lowercase-global",
+            "inject-field"
         ]
     }
 }

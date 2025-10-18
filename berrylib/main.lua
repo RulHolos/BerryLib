@@ -23,6 +23,8 @@ lstg.DoFile("lib/lib.lua")
 ---@type lstg.debug.manager
 Include("debug/view.lua")
 
+Include("se/se.lua")
+
 local quitFlag = false
 function QuitGame()
     quitFlag = true
