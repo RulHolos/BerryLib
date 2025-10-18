@@ -16,9 +16,16 @@ local KeyDirectionTimer = {
 }
 
 function GetInput()
-    for k, v in pairs(Settings.Keys) do
-        KeyStatePrev[k] = KeyState[k]
-        KeyState[k] = Keyboard.GetKeyState(v)
+    for i = 1, 2 do
+        for k, v in pairs(Settings["Keys_p" .. i]) do
+            KeyStatePrev[k] = KeyState[k]
+            KeyState[k] = Keyboard.GetKeyState(v)
+
+            if KeyStatePrev[k] ~= KeyState[k] then
+                -- Arguments: p_index, key name, is down
+                lstg.Signals:emit("KeyStateChanged", i, k, KeyState[k])
+            end
+        end
     end
 
     for k, _ in pairs(KeyDirectionTimer) do

@@ -193,4 +193,14 @@ function RenderClearViewMode(color)
     end
 end
 
+function GetPlayfieldScreenCoords()
+    local w = Screen.playfield
+    local l = -(w.width / 2)
+    local r = (w.width / 2)
+    local b = -(w.height / 2)
+    local t = (w.height / 2)
+
+    return l, r, b, t
+end
+
 CreateScreenData()
