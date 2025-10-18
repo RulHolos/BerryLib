@@ -91,6 +91,12 @@ function M:frame()
     end
 end
 
+local b_show_demo_window = false
+local b_show_memuse_window = false
+local b_show_framept_window = false
+local b_show_testinput_window = false
+local b_show_resmgr_window = false
+
 function M:layout()
     if F3_Trigger() then
         self.show_menu = not self.show_menu
@@ -114,7 +120,35 @@ function M:layout()
                 end
             end
 
+            -- I can't do that another way. Sub is stupid and I don't want to only support Flux just because of that.
+            if imgui.ImGui.BeginMenu("Backend") then
+                if imgui.ImGui.MenuItem("Memory Usage", nil, b_show_memuse_window) then b_show_memuse_window = not b_show_memuse_window end
+                if imgui.ImGui.MenuItem("Frame Statistics", nil, b_show_framept_window) then b_show_framept_window = not b_show_framept_window end
+                if imgui.ImGui.MenuItem("Test Input", nil, b_show_testinput_window) then b_show_testinput_window = not b_show_testinput_window end
+                if imgui.ImGui.MenuItem("Resource Manager", nil, b_show_resmgr_window) then b_show_resmgr_window = not b_show_resmgr_window end
+                if imgui.ImGui.MenuItem("Demo", nil, b_show_demo_window) then b_show_demo_window = not b_show_demo_window end
+                imgui.ImGui.EndMenu()
+            end
+
             ImGui.EndMainMenuBar()
+        end
+
+        if b_show_demo_window then
+            b_show_demo_window = imgui.ImGui.ShowDemoWindow(b_show_demo_window)
+        end
+        if b_show_memuse_window and imgui.backend.ShowMemoryUsageWindow then
+            b_show_memuse_window = imgui.backend.ShowMemoryUsageWindow(b_show_memuse_window)
+        end
+        if b_show_framept_window and imgui.backend.ShowFrameStatistics then
+            b_show_framept_window = imgui.backend.ShowFrameStatistics(b_show_framept_window)
+        end
+
+        if b_show_testinput_window and imgui.backend.ShowTestInputWindow then
+            b_show_testinput_window = imgui.backend.ShowTestInputWindow(b_show_testinput_window)
+        end
+
+        if b_show_resmgr_window and imgui.backend.ShowResourceManagerDebugWindow then
+            b_show_resmgr_window = imgui.backend.ShowResourceManagerDebugWindow(b_show_resmgr_window)
         end
 
         for _, v in ipairs(self.view_collection) do
