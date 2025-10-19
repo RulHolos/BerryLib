@@ -7,18 +7,27 @@ function M:init()
     self.normal_speed = 4
     self.focus_speed = 2
     self.focus = false
+    self.force_focus = false
     self.move_up = false
     self.move_down = false
     self.move_left = false
     self.move_right = false
+    self.lock = false
 
     self.dx = 0
 end
 
 function M:frame()
+    ---@type lstg.Player.Behavior.Death
+    ---@diagnostic disable-next-line: assign-type-mismatch
+    self.death = self.player:getBehavior("Death")
+    if not self.death.canAct(self.death) or self.lock then
+        return
+    end
+
     local dy, v = 0, self.normal_speed
 
-    if self.focus then
+    if self.focus or self.force_focus then
         v = self.focus_speed
     end
     if self.move_up then
@@ -68,6 +77,21 @@ function M:OnKeyAction(key_name, is_down)
     if key_name == "Right" then
         self.move_right = is_down
     end
+end
+
+function M:debug()
+    local success, value = ImGui.InputFloat("Normal Speed", self.normal_speed, 0.5, 2, "%.1f")
+    if success then
+        self.normal_speed = value
+    end
+
+    success, value = ImGui.InputFloat("Focus Speed", self.focus_speed, 0.5, 2, "%.1f")
+    if success then
+        self.focus_speed = value
+    end
+
+    _, self.force_focus = ImGui.Checkbox("Force focus", self.force_focus)
+    _, self.lock = ImGui.Checkbox("Lock movement", self.lock)
 end
 
 BasePlayerBehaviors[M.name] = M
