@@ -52,7 +52,7 @@ function PlayerSystem:init(index)
     table.insert(PlayersList, self)
 end
 
--- TODO: Change those 3 calls to signals.
+-- TODO: Change those 4 calls to signals.
 
 function PlayerSystem:frame()
     for _, behavior in ipairs(self.behaviors) do
@@ -64,7 +64,7 @@ function PlayerSystem:frame()
     self:AfterFrame()
 
     self.timer = self.timer + 1
-    self.protect = clamp(self.protect - 1, 0, 10000000)
+    self.protect = clamp(self.protect - 1, 0, INF)
 end
 
 function PlayerSystem:AfterFrame()

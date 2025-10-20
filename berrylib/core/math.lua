@@ -6,6 +6,7 @@ SQRT2 = math.sqrt(2)
 SQRT3 = math.sqrt(3)
 SQRT2_2 = math.sqrt(0.5)
 GOLD = 360 * (math.sqrt(5) - 1) / 2
+INF = 4294967296
 
 int = math.floor
 abs = math.abs
