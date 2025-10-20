@@ -1,7 +1,7 @@
 local patch = "lib.players.reimu_player.behaviors."
 local shoot = require(patch .. "shoot")
 local render = require(patch .. "render")
-local spell = require(patch .. "spell.lua")
+local spell = require(patch .. "spell")
 
 ---@class lstg.Player.ReimuPlayer : lstg.Player
 ReimuPlayer = Class(PlayerSystem)

@@ -23,9 +23,20 @@ function M:frame()
     if not self.death.canAct(self.death) then
         return
     end
+
+    if self.next_spell == 0 and self.bombing then
+        self:bomb()
+    end
+
+    if self.next_spell ~= 0 then
+        self.next_spell = self.next_spell - 1
+    end
 end
 
-function M:shoot()
+function M:bomb()
+    self.death:cancelDeath()
+    self.bombing = false
+
     self.player.collect_line = self.player.collect_line - 300
     Task.New(self, function()
         Task.Wait(90)
