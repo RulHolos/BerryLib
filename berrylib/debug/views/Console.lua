@@ -31,9 +31,7 @@ end
 lstg.Print = print
 
 local inputbuf = ImTextBuffer()
-inputbuf:clear()
-inputbuf:reserve(256)
-inputbuf:append('\0')
+inputbuf:resize(1024)
 
 local function xpcall_handler(err)
     return debug.traceback(err)
@@ -68,7 +66,7 @@ function Console:layout()
     local input_text_flags = ImInputTextFlags.EnterReturnsTrue
 
     local reclaim_focus = false
-    if ImGui.InputText("Input", inputbuf, 256, input_text_flags) then
+    if ImGui.InputText("Input", inputbuf, 1024, input_text_flags) then
         ---@type string
         local s = inputbuf:c_str()
         local r = s:sub(1, 1) == "="
@@ -95,8 +93,7 @@ function Console:layout()
                 logs[#logs + 1] = ' success'
             end
             inputbuf:clear()
-            inputbuf:reserve(256)
-            inputbuf:append('\0')
+            inputbuf:resize(1024)
             reclaim_focus = true
         end
     end
