@@ -133,8 +133,8 @@
 ---@field Dist fun(x1:number, y1:number, x2:number, y2:number) : number Returns distance between two points.
 ---@field GetV fun(object:lstg.object) : number, number Returns magnitude (speed) and direction (in degrees) of the object velocity.
 ---@field SetV fun(object:lstg.object, magnitude:number, direction:number, updateRot:boolean?) Set magnitude (speed) and direction (in degrees) of the object velocity. Will update `rot` if `updateRot` is `true`.
----@field GetAttr fun(...) Undocumented
----@field SetAttr fun(...) Undocumented
+---@field GetAttr fun(...) Basically __index
+---@field SetAttr fun(...) Basically __newindex
 ---@field DefaultRenderFunc fun(object:lstg.object) Performs the default render function for a game object.
 ---@field SetImgState fun(object:lstg.object, blend:BlendMode, a:number, r:number, g:number, b:number) Set parameters of the renderable resource bind to `object`. Also see `SetImageState`
 ---@field SetParState fun(object:lstg.object, blend:BlendMode, a:number, r:number, g:number, b:number) Set parameters of the renderable particules bind to `object`.

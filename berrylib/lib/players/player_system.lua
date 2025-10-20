@@ -23,6 +23,7 @@ function PlayerSystem:init(index)
 
     ---@type boolean Set by the dialog manager. Don't set yourself.
     self.in_dialog = false
+    self.collect_line = 96
 
     self.attachBehavior = PlayerSystem.attachBehavior
     self.detachBehavior = PlayerSystem.detachBehavior
@@ -172,7 +173,10 @@ local patch = "lib/players/base_behaviors/"
 Include(patch .. "move.lua")
 Include(patch .. "death.lua")
 
+----------------------------------------------
 --- Players
+
+--- TODO: Rework this
 ---@type table<string, string, lstg.Player>
 PlayerDefList = {}
 
