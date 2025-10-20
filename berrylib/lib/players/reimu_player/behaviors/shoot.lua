@@ -1,3 +1,18 @@
+local player_bullet = Class(Object)
+function player_bullet:init(img, x, y, v, angle, dmg)
+    self.group = GROUP_PLAYER_BULLET
+    self.layer = LAYER_PLAYER_BULLETS
+    self.img = img
+    self.x, self.y = x, y
+    self.rot = angle
+    self.vx = v * cos(angle)
+    self.vy = v * sin(angle)
+    self.dmg = dmg
+    if self.a ~= self.b then
+        self.rect = true
+    end
+end
+
 ---@class lstg.Player.Reimu.Behavior.Shoot : lstg.Player.Behavior
 local M = {}
 M.name = "Shoot"
@@ -27,6 +42,8 @@ end
 
 function M:shoot()
     PlaySound('plst00', 0.3, self.player.x / 1024)
+    New(player_bullet, "reimu_bullet_main", self.player.x + 10, self.player.y, 24, 90, 2)
+    New(player_bullet, "reimu_bullet_main", self.player.x - 10, self.player.y, 24, 90, 2)
 
     self.next_shoot = self.shoot_timer
 end
@@ -38,9 +55,6 @@ function M:OnKeyAction(key_name, is_down)
         self.fire = is_down
     end
 end
-
-local imgui_exists, imgui = pcall(require, "imgui")
-local ImGui = imgui.ImGui
 
 function M:debug()
     _, self.debug_fire = ImGui.Checkbox("Continuous shooting", self.debug_fire)
