@@ -265,6 +265,8 @@ function M.goToGroup(name)
         error(("Scene group '%s' doesn't exist."):format(name))
     end
 
+    print(("Going to scene \"%s\""):format(name))
+
     M.next_scene = group
     M.next()
 end
@@ -272,6 +274,16 @@ end
 function M.next()
     M.stopCurrentScene()
     M.createNextScene()
+end
+
+---@param name string The name of the next scene to load.
+function M.setNextScene(name)
+    for k, v in pairs(M.scenes) do
+        if v.name == name then
+            M.next_scene = M.scenes[name]
+            break
+        end
+    end
 end
 
 function M.stopCurrentScene()
