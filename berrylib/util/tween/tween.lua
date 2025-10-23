@@ -7,8 +7,8 @@ local Easing = require("berrylib.util.easing")
 ---@class lstg.Tween : lstg.object
 ---@field target lstg.object
 ---@field finished boolean
----@field onFrameFn fun(key, value)
----@field onCompleteFn fun()
+---@field onFrameFn fun(key, value)[]
+---@field onCompleteFn fun(object:any)[]
 ---@field easing fun(t:integer)
 ---@field completed integer
 ---@field repeatCount integer
@@ -54,7 +54,8 @@ function Tween:frame()
     end
 end
 
----@param target lstg.object The target object
+---@generic T lstg.object or table.
+---@param target T The target object
 ---@param properties table Properties of `target` to tween. Only number values.
 ---@param duration_frames integer Duration in frames
 ---@return lstg.Tween
@@ -70,8 +71,8 @@ function Tween.to(target, properties, duration_frames)
     self.repeatCount = 0
     self.completed = 0
     self.easing = Easing.linear
-    self.onFrameFn = function(key, value) end
-    self.onCompleteFn = function() end
+    self.onFrameFn = {}
+    self.onCompleteFn = {}
     self.finished = false
     self.yoyoFlag = false
 
@@ -101,6 +102,7 @@ end
 -- Chainable API --
 -- ============= --
 
+---Adds a easing behavior to this tween.
 ---@param name EasingType
 ---@return lstg.Tween self
 function Tween:ease(name)
@@ -115,6 +117,8 @@ function Tween:times(times)
     return self
 end
 
+---Adds a frame callback.
+---
 ---Will be called each frame for every properties set to change.
 ---@param callback fun(key, value)
 ---@return lstg.Tween self
@@ -126,16 +130,18 @@ end
 ---@param callback fun()
 ---@return lstg.Tween self
 function Tween:onComplete(callback)
-    self.onCompleteFn = callback
+    table.insert(self.onCompleteFn, callback or function(object) end)
     return self
 end
 
+---Creates a "back and forth" behavior.
 ---@return lstg.Tween self
 function Tween:yoyo()
     self.yoyoFlag = true
     return self
 end
 
+---Attaches an optional id to this tween for future reference.
 ---@param id string Identifier of this tween.
 ---@return lstg.Tween self
 function Tween:attachId(id)
