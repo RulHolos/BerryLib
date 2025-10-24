@@ -1,4 +1,4 @@
-local config = require("lib.menu.MenuConfig")
+local config = require("lib.menu.menuConfig")
 
 ---@class Scene.LoadingScene : Scene
 local M = SceneManager.new("Loading", true, true)

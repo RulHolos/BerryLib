@@ -17,10 +17,17 @@ local Easing = require("berrylib.util.easing")
 ---@field properties table<number>
 ---@field from table<number>
 ---@field yoyoFlag boolean
+---@field delay integer
+---@field delayTimer integer
 Tween = {}
 
 function Tween:frame()
     if self.finished then
+        return
+    end
+
+    if self.delayTimer < self.delay then
+        self.delayTimer = self.delayTimer + 1
         return
     end
 
@@ -75,6 +82,8 @@ function Tween.to(target, properties, duration_frames)
     self.onCompleteFn = {}
     self.finished = false
     self.yoyoFlag = false
+    self.delay = 0
+    self.delayTimer = 0
 
     for k, _ in pairs(properties) do
         self.from[k] = target[k]
@@ -110,7 +119,7 @@ function Tween:ease(name)
     return self
 end
 
----@param times integer Number of times to repeat
+---@param times integer Number of times to repeat.
 ---@return lstg.Tween self
 function Tween:times(times)
     self.repeatCount = times or 0
@@ -123,11 +132,14 @@ end
 ---@param callback fun(key, value)
 ---@return lstg.Tween self
 function Tween:onFrame(callback)
-    self.onFrameFn = callback
+    table.insert(self.onFrameFn, callback or function(key, value) end)
     return self
 end
 
----@param callback fun()
+---Adds a completed callback.
+---
+---Called when the tween finishes.
+---@param callback fun(object: any)
 ---@return lstg.Tween self
 function Tween:onComplete(callback)
     table.insert(self.onCompleteFn, callback or function(object) end)
@@ -145,6 +157,24 @@ end
 ---@param id string Identifier of this tween.
 ---@return lstg.Tween self
 function Tween:attachId(id)
-    self.id = id
+    self.id = id or "default"
+    return self
+end
+
+---Starts the tween after a certain amount of frames.
+---@param frames integer Delay to start the tween.
+---@return lstg.Tween self
+function Tween:delay(frames)
+    self.delay = frames or 0
+    return self
+end
+
+---Adds new properties to this tween. Useful for object-created-returned tweens.
+---@param tbl table A table of properties. Same format as `Tween.to()`.
+---@return lstg.Tween self
+function Tween:addProperties(tbl)
+    for k, v in pairs(tbl) do
+        self.properties[k] = v
+    end
     return self
 end

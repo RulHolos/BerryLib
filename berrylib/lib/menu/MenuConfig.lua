@@ -14,4 +14,11 @@ M.debug_mode = true
 ---@type boolean
 M.disable_loading_screen = true
 
+---Dictates the number of frames to take to switch between views.
+---
+---Note: This time is the total for fading out and in to the new scene.
+---
+---This value will be half of itself for a single scene.
+M.frames_for_switching = 60
+
 return M

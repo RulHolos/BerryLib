@@ -71,6 +71,8 @@ SceneManager:next()
 Will make the stage 5 advance to 6a.
 --]]
 
+Include("lib/menu/manager.lua")
+
 ---@alias SceneType "group"|"scene"
 
 ---@class Scene
@@ -84,6 +86,8 @@ local S = {
     render = function() end,
     del = function() end,
     timer = 0,
+    ---@type Menu.Manager?
+    menu_manager = nil
 }
 
 --------------------------------------
@@ -187,6 +191,7 @@ function SG:newScene(name)
         name = name,
         is_menu = false,
         timer = 0,
+        menu_manager = nil
     }
 
     scene = self:addScene(scene)
@@ -228,7 +233,12 @@ function M.new(name, is_entry_point, is_menu)
         name = name,
         is_menu = is_menu,
         timer = 0,
+        menu_manager = nil,
     }
+
+    if is_menu then
+        scene.menu_manager = MenuManager.create()
+    end
 
     M.scenes[name] = scene
     if is_entry_point then
@@ -360,6 +370,10 @@ function M.frame()
     Task.Do(M.current_scene)
     M.current_scene:frame()
     M.current_scene.timer = M.current_scene.timer + 1
+
+    if M.current_scene.is_menu then
+        M.current_scene.menu_manager:frame()
+    end
 end
 
 function M.render()
@@ -367,7 +381,11 @@ function M.render()
 
     SetViewMode("world")
     M.current_scene:render()
-    SetViewMode("ui") -- Maybe remove this
+
+    if M.current_scene.is_menu then
+        SetViewMode("ui")
+        M.current_scene.menu_manager:frame()
+    end
 end
 
 --------------------------------------
