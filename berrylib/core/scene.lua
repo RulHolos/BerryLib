@@ -376,6 +376,7 @@ function M.frame()
     end
 end
 
+---@private
 function M.render()
     if M.current_scene == nil then return end
 
@@ -384,7 +385,7 @@ function M.render()
 
     if M.current_scene.is_menu then
         SetViewMode("ui")
-        M.current_scene.menu_manager:frame()
+        M.current_scene.menu_manager:render()
     end
 end
 
@@ -392,6 +393,7 @@ end
 --- Initialization
 
 lstg.Signals:register("frame", "SceneManager:frame", M.frame, 999)
+lstg.Signals:register("render", "SceneManager:render", M.render, 999)
 
 SceneManager = M
 return M
