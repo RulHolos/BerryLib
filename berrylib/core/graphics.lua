@@ -44,6 +44,8 @@ function CreateScreenData()
     Screen.scale = math.min(Screen.hScale, Screen.vScale)
 
     CreatePlayfieldData()
+
+    SetViewMode("ui") -- Just for applying, this isn't for any rendering outside of applying the values.
 end
 
 function CreatePlayfieldData()
@@ -149,9 +151,10 @@ function SetRenderRect(width, height, scrl, scrr, scrb, scrt)
         SetScissorRect(l, r, b, t)
     end
 
-    local l = -(width / 2)
+    -- What.
+    local l = 0
     local r = (width / 2)
-    local b = -(height / 2)
+    local b = 0
     local t = (height / 2)
 
     SetOrtho(l, r, b, t)
