@@ -6,11 +6,3 @@ function test_scene:init()
 
     New(ReimuPlayer)
 end
-
-------------------
---- Menu
-
-local menu = SceneManager.new("menu", false, true)
-function menu:init()
-
-end
