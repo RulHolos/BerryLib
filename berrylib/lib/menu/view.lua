@@ -1,18 +1,12 @@
 ---@class Menu.View
+---@field id string Set by the manager object.
+---@field frame fun(self:Menu.View)
+---@field render fun(self:Menu.View)
 MenuView = {}
 
-function MenuView:init(id)
-    self.id = id
+function MenuView:init()
     self.locked = true
     self.alpha = 0
-end
-
-function MenuView:frame()
-
-end
-
-function MenuView:render()
-    if self.alpha == 0 then return end
 end
 
 ---@nodiscard

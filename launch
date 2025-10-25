@@ -23,7 +23,7 @@ for k, v in pairs(editor_setting) do
 end
 
 if Settings.Game == nil then -- Editor should replace this when testing. No need to do it yourself for testing things.
-	Settings.Game = "SomeGame" -- Replace this with your game folder for releases.
+	--Settings.Game = "SomeGame" -- Replace this with your game folder for releases.
 end
 
 lstg.FileManager.CreateDirectory("game")
@@ -37,7 +37,7 @@ elseif lstg.FileManager.FileExist(dir_root_script) then
 end
 
 lstg.SetSplash(true)
-lstg.SetTitle(Settings.Game)
+lstg.SetTitle(Settings.Game or "Launcher")
 lstg.SetWindowed(Settings.Windowed)
 lstg.SetResolution(Settings.XResolution, Settings.YResolution)
 lstg.SetFPS(60)

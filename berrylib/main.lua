@@ -31,6 +31,11 @@ function QuitGame()
     quitFlag = true
 end
 
+---@return boolean @True if the game is set, otherwise; false.
+function GameExists()
+    return Settings.Game ~= nil
+end
+
 -- ======================== --
 -- Engine defined functions --
 -- ======================== --
@@ -40,7 +45,12 @@ function GameInit()
 
     lstg.SetResourceStatus("stage")
 
-    Include("root.lua")
+    if not GameExists() then
+        Include("lib/menu/launcher/launcher.lua")
+    else
+        Include("root.lua")
+    end
+
     lstg.plugin.DispatchEvent("afterGame")
 
     if SceneManager.next_scene == nil then

@@ -8,9 +8,12 @@ function M:init()
     print("Loaded Loading Scene.")
 
     if config.disable_loading_screen then
-        --SceneManager.setNextScene("test_entry")
-        --SceneManager.next()
-        SceneManager.goToGroup("Normal")
+        if GameExists() then
+            SceneManager.goToGroup("Normal")
+        else
+            SceneManager.setNextScene("launcher")
+            SceneManager.next()
+        end
     end
 
     self.showing = true
