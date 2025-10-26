@@ -33,7 +33,7 @@ end
 
 function M:render()
     SetViewMode("ui")
-    Render("ui_bg", 0, 0)
+    RenderRect("ui_bg", 0, Screen.width, 0, Screen.height)
 end
 
 function M:del()

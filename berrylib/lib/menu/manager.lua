@@ -27,7 +27,6 @@ function MenuManager:frame()
 end
 
 function MenuManager:render()
-    print(self.views[self.current_view])
     if self.views[self.current_view] then
         self.views[self.current_view]:render()
     end
@@ -52,6 +51,8 @@ function MenuManager:addView(id, view, switch_to)
         self.current_view = id
         print(("Switching to view \"%s\""):format(id))
     end
+
+    view:init()
 end
 
 ---Removes an existing view.
@@ -85,11 +86,13 @@ end
 ---The tweens doesn't handle the alpha by default, don't forget the set them with `Tween:addProperties()`
 ---@param id string Identifier of the view
 ---@param frames integer? Time in frame for switching to the view. If not specified, will default to the config value.
----@return lstg.Tween, lstg.Tween @Fade_out, Fade_in
+---@return lstg.Tween|nil, lstg.Tween|nil @Fade_out, Fade_in. Nil, Nil if `frame` is 0.
 function MenuManager:switchTo(id, frames)
     if frames == 0 then
+        assert(self.views[id] ~= nil, "The target view doesn't exist in this menu.")
         self.current_view = self.views[id]
         self.switching_to = nil
+        return nil, nil
     end
 
     local half = (frames or config.frames_for_switching) / 2

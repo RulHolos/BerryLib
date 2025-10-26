@@ -73,3 +73,26 @@ function KeyToName(code)
     end
     return ("KEY %d"):format(code)
 end
+
+local old_GetMousePosition = lstg.GetMousePosition
+function GetMousePosition()
+    local mx, my = old_GetMousePosition()
+
+    mx, my = mx / Screen.scale, my / Screen.scale
+
+    return mx, my
+end
+lstg.GetMousePosition = GetMousePosition
+
+---@param left number
+---@param right number
+---@param bottom number
+---@param top number
+---@retrun boolean
+function IsMouseInRect(left, right, bottom, top)
+    local x, y = GetMousePosition()
+    local xRect = x > left and x < right
+    local yRect = y > bottom and y < top
+
+    return xRect and yRect
+end

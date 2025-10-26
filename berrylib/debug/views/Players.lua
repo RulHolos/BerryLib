@@ -32,6 +32,8 @@ end
 function Players:DisplayPlayer(player)
     ImGui.Text("Player Debugger for " .. player.name)
 
+    ImGui.Text(("Position: x=%s, y=%s"):format(player.x, player.y))
+
     local success, value = ImGui.InputInt("Protect Time", player.protect, 1, 15)
     if success then
         player.protect = clamp(value, 0, 10000000)
