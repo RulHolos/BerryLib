@@ -136,26 +136,44 @@ function SetViewMode(mode)
                 * 2 * math.tan(lstg.view3d.fovy * 0.5)) / (scrr - scrl))
     elseif mode == "world" then
         local w = Screen.playfield
-        SetRenderRect(w.width, w.height, w.xoffset, w.xoffset + w.width, w.yoffset, w.yoffset + w.height)
+        SetRenderRect(w.width, w.height,
+            w.xoffset, w.xoffset + w.width,
+            w.yoffset, w.yoffset + w.height,
+            true
+        )
     elseif mode == "ui" then
-        SetRenderRect(Screen.width, Screen.height, 0, Screen.width, 0, Screen.height)
+        SetRenderRect(Screen.width, Screen.height,
+            0, Screen.width,
+            0, Screen.height,
+            false
+        )
     else
         error("Unknown ViewMode: '" .. mode .. "'.")
     end
     lstg.viewmode = mode
 end
 
-function SetRenderRect(width, height, scrl, scrr, scrb, scrt)
+function SetRenderRect(width, height, scrl, scrr, scrb, scrt, centered)
     local function setViewportAndScissorRect(l, r, b, t)
         SetViewport(l, r, b, t)
         SetScissorRect(l, r, b, t)
     end
 
-    -- What.
-    local l = 0
-    local r = (width / 2)
-    local b = 0
-    local t = (height / 2)
+    local l, r, b, t
+
+    if centered then
+        -- Center at (0, 0)
+        l = -(width / 2)
+        r = (width / 2)
+        b = -(height / 2)
+        t = (height / 2)
+    else
+        -- Bottom-left origin
+        l = 0
+        r = width
+        b = 0
+        t = height
+    end
 
     SetOrtho(l, r, b, t)
 
