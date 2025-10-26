@@ -25,6 +25,7 @@ lstg.DoFile("lib/lib.lua")
 Include("debug/view.lua")
 
 Include("se/se.lua")
+Include("font/font.lua")
 
 local quitFlag = false
 function QuitGame()
