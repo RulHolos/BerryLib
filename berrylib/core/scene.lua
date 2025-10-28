@@ -389,6 +389,14 @@ function M.render()
     end
 end
 
+---TODO:
+---
+---This function adds a scene on top of the current one as a temporary scene.
+---It is used as a way to add a menu over the screen (only used by the pause screen in base BerryLib.)
+function M.addStack()
+
+end
+
 --------------------------------------
 --- Initialization
 

@@ -7,9 +7,10 @@ This module contains the implementation for the gameplay interface (stg-frame), 
 The UI is implemented as a game object, which, compared to THlib, IS subject to pausing.
 The UI object is created automatically when a non-menu scene is entered, and destroyed when leaving it.
 
-Vertical UI is not supported in BerryLib, only horizontal UI is.
+Vertical UI is not supported in BerryLib by default, only horizontal UI is.
 
 This UI framework is not fit for use with the editor and is code-only.
+If you really wish to edit this UI in editor, may ZUN have mercy on you, and please reconsider your life and sanity (looking at you Ryann...)
 ]]
 
 ---@class berry.UI
