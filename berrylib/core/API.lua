@@ -125,7 +125,7 @@
 ---@class lstg
 ---@field args string Arguments passed from the CLI.
 ---@field FileManager lstg.FileManager
----@field BoxCheck fun(object:lstg.object, left:number, right:number, top:number, bottom:number) : boolean Checks if position of `object` is in the given range.
+---@field BoxCheck fun(object:lstg.object, left:number, right:number, bottom:number, top:number) : boolean Checks if position of `object` is in the given rect.
 ---@field ColliCheck fun(object:lstg.object, other:lstg.object) : boolean Checks if two objects are intersecting.
 ---@field Angle fun(a:lstg.object, b:lstg.object) : number Retuns angle between the line connecting two objects in degrees.
 ---@field Angle fun(x1:number, y1:number, x2:number, y2:number) : number Returns angle between the line connection two points in degrees.
@@ -273,6 +273,7 @@
 ---@field ObjFrame fun() Peforms the position, acceleration and rotation of all game objects. !! Do not invoke in coroutines !!
 ---@field ObjRender fun() Renders all the game objects. Will invoke render() one by one. Objects with smaller `layer` will be rendered first. !! Do not invoke in coroutines !!
 ---@field SetBound fun(left:number, right:number, bottom:number, top:number) Set screen boundaries for all game objects. 
+---@field GetBound fun(): number, number, number, number Returns the current set world bounds in order: left, right, bottom, top. Flux only.
 ---@field UpdateXY fun() Updates the dx, dy, lastx, lasty and rot (when navi is `true`) of all game objects. !! Do not invoke in coroutines !!
 ---@field ResetPool fun() Deletes all game objects marked to be deleted or killed immediately.
 ---@field ObjList fun(group:number) : function Returns an iterator that goes through all objects in a group.
@@ -505,6 +506,7 @@ GetnObj = lstg.GetnObj
 ObjFrame = lstg.ObjFrame
 ObjRender = lstg.ObjRender
 SetBound = lstg.SetBound
+GetBound = lstg.GetBound
 UpdateXY = lstg.UpdateXY
 ResetPool = lstg.ResetPool
 ObjList = lstg.ObjList
