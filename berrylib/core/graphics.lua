@@ -54,6 +54,15 @@ function CreatePlayfieldData()
     Screen.playfield.boundOffset = 32
     Screen.playfield.xoffset = 32 -- Those two a values are the offset of the playfield in relation to the render context.
     Screen.playfield.yoffset = 16
+
+    local w = Screen.playfield
+
+    SetBound(
+        -((w.width / 2) + w.boundOffset),
+        (w.width / 2) + w.boundOffset,
+        -((w.height / 2) + w.boundOffset),
+        (w.height / 2) + w.boundOffset
+    )
 end
 
 -- ========= --

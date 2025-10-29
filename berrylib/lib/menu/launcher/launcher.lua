@@ -32,6 +32,8 @@ function launcher:init()
             QuitGame()
         end)
     }
+
+    LoadTTF("monteci", "font/monteci.ttf", 80)
 end
 
 function launcher:frame()

@@ -50,6 +50,8 @@ function PlayerSystem:init(index)
     end)
 
     table.insert(PlayersList, self)
+
+    self.grazer = New(PlayerGrazer, self)
 end
 
 -- TODO: Change those 4 calls to signals.
@@ -63,7 +65,6 @@ function PlayerSystem:frame()
 
     self:AfterFrame()
 
-    self.timer = self.timer + 1
     self.protect = clamp(self.protect - 1, 0, INF)
 end
 
@@ -185,3 +186,95 @@ function AddPlayerToPlayerList(display_name, replay_name, class)
 end
 
 Include("lib/players/reimu_player/reimu.lua")
+
+
+--- Grazer
+
+LoadPS("graze", "players/graze.psi", "parimg6")
+
+--[[
+This object needs to be an actual object and not a behavior because of multiple reasons.
+But the best reason is that it must be on a different layer than the player, and also
+have its own collider callback, since it has a different collider size.
+]]
+
+PlayerGrazer = Class(Object)
+---@param player lstg.Player
+function PlayerGrazer:init(player)
+    self.layer = LAYER_ENEMY_BULLETS_EF + 50
+    self.group = GROUP_PLAYER
+    self.player = player
+    self.grazed = false
+    self.img = "graze"
+    ParticleStop(self)
+    self.a = 24
+    self.b = 24
+    self.aura = 0
+    self.aura_d = 0
+    self._slow_timer = 0
+    self._pause = 0
+
+    self.move = nil
+    self.death = nil
+end
+
+function PlayerGrazer:frame()
+    if not IsValid(self.player) then
+        lstg.MsgBoxWarn("Player invalid")
+        Del(self)
+        return
+    end
+
+    ---@type lstg.Player.Behavior.Move
+    ---@diagnostic disable-next-line: assign-type-mismatch
+    self.move = self.player:getBehavior("Move")
+
+    ---@type lstg.Player.Behavior.Death
+    ---@diagnostic disable-next-line: assign-type-mismatch
+    self.death = self.player:getBehavior("Death")
+
+    local alive = (self.death.dtimer == 0 or self.death.dtimer > 90)
+    if alive then
+        self.x = self.player.x
+        self.y = self.player.y
+        self.hide = self.player.hide
+    end
+    if self.move.focus == 1 then
+        self._slow_timer = min(self._slow_timer + 1, 30)
+    else
+        self._slow_timer = 0
+    end
+    if self._pause == 0 then
+        self.aura = self.aura + 1.5
+    end
+    self._pause = max(0, self._pause - 1)
+    self.aura_d = 180 * cos(90 * self._slow_timer / 30) ^ 2
+
+    if self.grazed then
+        PlaySound("graze", 0.3, self.x / 200)
+        self.grazed = false
+        ParticleFire(self)
+    else
+        ParticleStop(self)
+    end
+end
+
+function PlayerGrazer:render()
+    Object.render(self)
+    SetImageState("player_aura", "", Color(0xC0FFFFFF))
+    Render("player_aura", self.x, self.y, -self.aura + self.aura_d, self.move.slow_lh)
+    SetImageState("player_aura", "", Color(0xC0FFFFFF) * self.move.slow_lh + Color(0x00FFFFFF) * (1 - self.move.slow_lh))
+    Render("player_aura", self.x, self.y, self.aura, 2 - self.move.slow_lh)
+end
+
+---@param other lstg.object
+function PlayerGrazer:colli(other)
+---@diagnostic disable-next-line: undefined-field
+    if other.group ~= GROUP_ENEMY and (not (other._grazed) or other._inf_graze) then
+        self.grazed = true
+---@diagnostic disable-next-line: undefined-field
+        if not (other._inf_graze) then
+            other._grazed = true
+        end
+    end
+end

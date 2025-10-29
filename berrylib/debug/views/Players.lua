@@ -9,7 +9,7 @@ local ImStyleVar = imgui.ImGuiStyleVar
 local Players = {}
 
 function Players:getWindowName() return "Players Debugger" end
-function Players:getMenuGroup() return "Tools" end
+function Players:getMenuGroup() return "Debuggers" end
 function Players:getViewId() return "view.Players" end
 function Players:getEnabled() return self.enabled end
 ---@param v boolean

@@ -6,7 +6,7 @@ M.priority = 100
 function M:init()
     self.normal_speed = 4
     self.focus_speed = 2
-    self.focus = false
+    self.focus = 0
     self.force_focus = false
     self.move_up = false
     self.move_down = false
@@ -14,6 +14,8 @@ function M:init()
     self.move_right = false
     self.lock = false
     self.restrict_to_bounds = true
+
+    self.slow_lh = 0
 
     self.dx = 0
 end
@@ -27,8 +29,11 @@ function M:frame()
     end
 
     local dy, v = 0, self.normal_speed
+    if self.force_focus then
+        self.focus = 1
+    end
 
-    if self.focus or self.force_focus then
+    if self.focus == 1 then
         v = self.focus_speed
     end
     if self.move_up then
@@ -56,6 +61,14 @@ function M:frame()
         self.player.x = math.max(math.min(self.player.x, r - 4), l + 4)
         self.player.y = math.max(math.min(self.player.y, t - 4), b + 4)
     end
+
+    self.slow_lh = self.slow_lh + (self.focus - 0.5) * 0.3
+    if self.slow_lh < 0 then
+        self.slow_lh = 0
+    end
+    if self.slow_lh > 1 then
+        self.slow_lh = 1
+    end
 end
 
 function M:afterFrame()
@@ -66,7 +79,11 @@ end
 ---@param is_down boolean
 function M:OnKeyAction(key_name, is_down)
     if key_name == "Focus" then
-        self.focus = is_down
+        if is_down then
+            self.focus = 1
+        else
+            self.focus = 0
+        end
     end
     if key_name == "Up" then
         self.move_up = is_down

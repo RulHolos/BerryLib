@@ -9,7 +9,7 @@ local ImStyleVar = imgui.ImGuiStyleVar
 local SceneDebugger = {}
 
 function SceneDebugger:getWindowName() return "Scene Debugger" end
-function SceneDebugger:getMenuGroup() return "Tools" end
+function SceneDebugger:getMenuGroup() return "Debuggers" end
 function SceneDebugger:getViewId() return "view.SceneDebugger" end
 function SceneDebugger:getEnabled() return self.enabled end
 ---@param v boolean
