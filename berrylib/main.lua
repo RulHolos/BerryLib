@@ -72,8 +72,8 @@ function FrameFunc()
 
     lstg.Signals:emit("frame")
 
-    lstg.ObjFrame()
-    lstg.BoundCheck()
+    ObjFrame()
+    BoundCheck()
     CollisionCheck(GROUP_PLAYER, GROUP_ENEMY_BULLET)
     CollisionCheck(GROUP_PLAYER, GROUP_ENEMY)
     CollisionCheck(GROUP_PLAYER, GROUP_BOSS)
@@ -82,7 +82,9 @@ function FrameFunc()
     CollisionCheck(GROUP_BOSS, GROUP_PLAYER_BULLET)
     CollisionCheck(GROUP_NONTJT, GROUP_PLAYER_BULLET)
     CollisionCheck(GROUP_ITEM, GROUP_PLAYER)
-    lstg.UpdateXY()
+
+    UpdateXY()
+    AfterFrame()
 
     ImGuiManager:layout()
 
