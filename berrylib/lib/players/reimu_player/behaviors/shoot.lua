@@ -57,6 +57,11 @@ function M:OnKeyAction(key_name, is_down)
 end
 
 function M:debug()
+    local success, value = ImGui.InputInt("Shoot timer", self.shoot_timer, 1, 1)
+    if success then
+        self.shoot_timer = clamp(value, 1, INF)
+    end
+
     _, self.debug_fire = ImGui.Checkbox("Continuous shooting", self.debug_fire)
 end
 

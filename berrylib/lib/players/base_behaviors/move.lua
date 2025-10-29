@@ -13,6 +13,7 @@ function M:init()
     self.move_left = false
     self.move_right = false
     self.lock = false
+    self.restrict_to_bounds = true
 
     self.dx = 0
 end
@@ -51,8 +52,10 @@ function M:frame()
     self.player.x = self.player.x + self.dx
     self.player.y = self.player.y + dy
     local l, r, b, t = GetPlayfieldScreenCoords()
-    self.player.x = math.max(math.min(self.player.x, r - 4), l + 4)
-    self.player.y = math.max(math.min(self.player.y, t - 4), b + 4)
+    if self.restrict_to_bounds then
+        self.player.x = math.max(math.min(self.player.x, r - 4), l + 4)
+        self.player.y = math.max(math.min(self.player.y, t - 4), b + 4)
+    end
 end
 
 function M:afterFrame()
@@ -92,6 +95,7 @@ function M:debug()
 
     _, self.force_focus = ImGui.Checkbox("Force focus", self.force_focus)
     _, self.lock = ImGui.Checkbox("Lock movement", self.lock)
+    _, self.restrict_to_bounds = ImGui.Checkbox("Restrict to Bounds", self.restrict_to_bounds)
 end
 
 BasePlayerBehaviors[M.name] = M
