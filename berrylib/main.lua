@@ -27,6 +27,8 @@ Include("debug/view.lua")
 Include("se/se.lua")
 Include("font/font.lua")
 
+Include("editor.lua")
+
 local quitFlag = false
 function QuitGame()
     quitFlag = true

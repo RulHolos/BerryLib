@@ -9,6 +9,7 @@ Settings = nil
 
 lstg.FileManager.AddSearchPath("berrylib/")
 lstg.FileManager.AddSearchPath("assets/")
+lstg.FileManager.AddSearchPath("editor/")
 
 lstg.DoFile("core/API.lua")
 lstg.DoFile("util/std.lua")
