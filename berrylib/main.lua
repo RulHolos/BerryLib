@@ -62,9 +62,10 @@ function GameInit()
 end
 
 function FrameFunc()
-    ImGuiManager:frame()
     lstg.SetTitle(("%s | %.2f FPS | %d OBJs"):format(Settings.Game, lstg.GetFPS(), lstg.GetnObj()))
     GetInput()
+
+    ImGuiManager:frame()
 
     -- Only call this to initiate the entry_point scene.
     -- SceneManager:next() will need to be called manually each time after that.
@@ -96,15 +97,19 @@ end
 function RenderFunc()
     lstg.BeginScene()
 
-    lstg.Signals:emit("render")
-
     if SceneManager.current_scene then
        SceneManager.current_scene:render()
     end
     lstg.ObjRender()
 
+    lstg.Signals:emit("render")
+
     ImGuiManager:render()
     lstg.EndScene()
+
+    if GetLastKey() == Settings.Snapshot_Key then
+        lstg.LocalUserData.Snapshot()
+    end
 end
 
 function FocusLoseFunc()
