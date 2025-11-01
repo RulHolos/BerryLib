@@ -170,9 +170,9 @@
 ---@field CheckRes fun(resType:ResourceType, name:string) : ResourcePool Returns name of the pool where a resource is located. Usually used to check if a resource exists.
 ---@field EnumRes fun(resType:ResourceType) : table, table Returns array of all the resource names in `global` and `stage` pools respectively.
 ---@field ParticleSystemData fun(...) Undocumented
----@field SetImageState fun(name:string, blendmode:BlendMode, color:lstg.Color, color2:lstg.Color?, color3:lstg.Color?, color4:lstg.Color?) Sets the parameters of an image or texture resource.
+---@field SetImageState fun(name:string, blendmode:BlendMode, color:lstg.Color?, color2:lstg.Color?, color3:lstg.Color?, color4:lstg.Color?) Sets the parameters of an image or texture resource.
 ---@field SetImageCenter fun(name:string, x:number, y:number) Sets center of an image or texture resource, relative to its top-left corner.
----@field SetAnimationState fun(name:string, blendmode:BlendMode, color:lstg.Color) Sets the parameters of an animation resource.
+---@field SetAnimationState fun(name:string, blendmode:BlendMode, color:lstg.Color?) Sets the parameters of an animation resource.
 ---@field SetAnimationCenter fun(name:string, x:number, y:number) Sets center of an image or texture resource, relative to its top-left corner.
 ---@field SetAnimationScale fun(name:string, scale:number) Sets the scale of an animation resource.
 ---@field GetAnimationScale fun(name:string) : number Returns the scale of an animation resource.
