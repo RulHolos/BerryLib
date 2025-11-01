@@ -14,6 +14,7 @@ local keyboard = lstg.Input.Keyboard
 ---| "Snapshot"
 ---| "Retry"
 
+---@class Settings
 Default_Settings = {
     Username = "Player",
     Locale = "en_us",
@@ -24,6 +25,7 @@ Default_Settings = {
     VSync = true,
     SEVolume = 25,
     BGMVolume = 30,
+    Snapshot_Key = keyboard.Home,
     Keys_p1 = {
         Up = keyboard.Up,
         Down = keyboard.Down,
@@ -33,7 +35,6 @@ Default_Settings = {
         Bomb = keyboard.X,
         Special = keyboard.C,
         Focus = keyboard.LeftShift,
-        Snapshot = keyboard.Home,
         Retry = keyboard.R,
     },
     Keys_p2 = {
@@ -45,7 +46,6 @@ Default_Settings = {
         Bomb = keyboard.X,
         Special = keyboard.C,
         Focus = keyboard.LeftShift,
-        Snapshot = keyboard.Home,
         Retry = keyboard.R,
     }
 }
@@ -55,6 +55,7 @@ local function get_settings_file()
 end
 
 ---Visits a table and serializes it to json.
+---@return string @Serialized settings.
 function Serialize(o)
     if type(o) == "table" then
         ---Visits a table recursively.
@@ -80,6 +81,8 @@ end
 
 ---Transforms a serialized string into a table, ignores functions.
 ---@param s string Serialized json
+---@generic C
+---@return C
 function Deserialize(s)
     return cjson.decode(s)
 end
@@ -87,9 +90,11 @@ end
 function LoadConfig()
     local f, msg = io.open(get_settings_file(), 'r')
     if f then
+        ---@type Settings
         Settings = Deserialize(f:read('*a'))
         f:close()
     else
+        ---@type Settings
         Settings = Default_Settings
     end
 end
