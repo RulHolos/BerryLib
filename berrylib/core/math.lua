@@ -74,3 +74,8 @@ function clamp(v, v_min, v_max)
     v_min, v_max = math.min(v_min, v_max), math.max(v_min, v_max)
     return math.max(v_min, math.min(v, v_max))
 end
+
+function wrap(value, min, max)
+    local range = max - min + 1
+    return ((value - min) % range + range) % range + min
+end
