@@ -18,9 +18,10 @@ function Players:setState(v) self.enabled = v end
 function Players:frame() end
 function Players:layout()
     if ImGui.BeginTabBar("PlayersTab") then
-        for _, v in ipairs(PlayersList) do
-            if ImGui.BeginTabItem(v.name) then
-                self:DisplayPlayer(v)
+        if lstg.var.player then
+            local p = lstg.var.player
+            if ImGui.BeginTabItem(p.name) then
+                self:DisplayPlayer(p)
                 ImGui.EndTabItem()
             end
         end

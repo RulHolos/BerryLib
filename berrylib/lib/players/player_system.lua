@@ -1,16 +1,11 @@
 ---@type lstg.Player.Behavior[]
 BasePlayerBehaviors = {}
 
----@type lstg.Player[]
-PlayersList = {}
-
 ---@class lstg.Player : lstg.object
 PlayerSystem = Class(Object)
 
----@param index integer Player index, p1, p2. BerryLib *natively* supports only two players at max.
-function PlayerSystem:init(index)
-    index = index or 1
-    self.index = index
+function PlayerSystem:init()
+    lstg.var.player = self
 
     self.x, self.y = 0, -192
 
@@ -36,20 +31,15 @@ function PlayerSystem:init(index)
         self:attachBehavior(v)
     end
 
-    ---@param p_index integer
     ---@param key_name KnownKeys
     ---@param is_down boolean
-    lstg.Signals:register("KeyStateChanged", "PlayerSystem:do_input_p" .. index, function(p_index, key_name, is_down)
-        if p_index ~= index then return end -- Not the right player
-
+    lstg.Signals:register("KeyStateChanged", "PlayerSystem:do_input", function(key_name, is_down)
         for _, v in ipairs(self.behaviors) do
             if v.OnKeyAction then
                 v:OnKeyAction(key_name, is_down)
             end
         end
     end)
-
-    table.insert(PlayersList, self)
 
     self.grazer = New(PlayerGrazer, self)
 end
@@ -138,15 +128,11 @@ function PlayerSystem:getBehavior(name)
 end
 
 function PlayerSystem:kill()
-    for k, v in ipairs(self.behaviors) do
+    for _, v in ipairs(self.behaviors) do
         self:detachBehavior(v.name)
     end
 
-    for k, v in ipairs(PlayersList) do
-        if v == self then
-            PlayersList[k] = nil
-        end
-    end
+    lstg.var.player = nil
 
     Del(self)
 end
@@ -190,8 +176,6 @@ Include("lib/players/reimu_player/reimu.lua")
 
 --- Grazer
 
-LoadPS("graze", "players/graze.psi", "parimg6")
-
 --[[
 This object needs to be an actual object and not a behavior because of multiple reasons.
 But the best reason is that it must be on a different layer than the player, and also
@@ -205,7 +189,7 @@ function PlayerGrazer:init(player)
     self.group = GROUP_PLAYER
     self.player = player
     self.grazed = false
-    self.img = "graze"
+    self.img = "player:graze"
     ParticleStop(self)
     self.a = 24
     self.b = 24

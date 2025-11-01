@@ -25,8 +25,7 @@ Default_Settings = {
     VSync = true,
     SEVolume = 25,
     BGMVolume = 30,
-    Snapshot_Key = keyboard.Home,
-    Keys_p1 = {
+    Keys = {
         Up = keyboard.Up,
         Down = keyboard.Down,
         Right = keyboard.Right,
@@ -36,18 +35,8 @@ Default_Settings = {
         Special = keyboard.C,
         Focus = keyboard.LeftShift,
         Retry = keyboard.R,
+        Snapshot = keyboard.Home,
     },
-    Keys_p2 = {
-        Up = keyboard.Up,
-        Down = keyboard.Down,
-        Right = keyboard.Right,
-        Left = keyboard.Left,
-        Shoot = keyboard.Z,
-        Bomb = keyboard.X,
-        Special = keyboard.C,
-        Focus = keyboard.LeftShift,
-        Retry = keyboard.R,
-    }
 }
 
 local function get_settings_file()

@@ -6,8 +6,8 @@ local spell = require(patch .. "spell")
 ---@class lstg.Player.ReimuPlayer : lstg.Player
 ReimuPlayer = Class(PlayerSystem)
 
-function ReimuPlayer:init(slot)
-    PlayerSystem.init(self, slot)
+function ReimuPlayer:init()
+    PlayerSystem.init(self)
     -----------------------------------------
     LoadTexture("reimu_player", "players/reimu_player/reimu.png")
     -----------------------------------------

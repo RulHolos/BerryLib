@@ -121,9 +121,9 @@ function Bullet.fire(bullet_type, color, x, y, v, ang, aim, indes, wait)
     local b = New(Bullet, bullet_type, color, indes)
     b.x = x
     b.y = y
-    --if aim and IsValid(player) then
-    --    ang = ang + Angle(b, player)
-    --end
+    if aim and IsValid(lstg.var.player) then
+        ang = ang + Angle(b, lstg.var.player)
+    end
     if wait then
         b.rot = ang
         b.wait = wait

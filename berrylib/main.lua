@@ -107,7 +107,7 @@ function RenderFunc()
     ImGuiManager:render()
     lstg.EndScene()
 
-    if GetLastKey() == Settings.Snapshot_Key then
+    if KeyIsPressed("Snapshot") then
         lstg.LocalUserData.Snapshot()
     end
 end
