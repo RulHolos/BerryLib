@@ -12,7 +12,7 @@ M.debug_mode = true
 ---
 ---However, be careful, no resources will be loaded at this stage if you skip it.
 ---@type boolean
-M.disable_loading_screen = true
+M.disable_loading_screen = false
 
 ---Dictates the number of frames to take to switch between views.
 ---
