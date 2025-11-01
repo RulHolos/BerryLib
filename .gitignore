@@ -2,7 +2,7 @@
 *.log
 *.dll
 *.ini
-/plugins
+/plugins/plugins.json
 /score
 .vscode
 ryannlib
