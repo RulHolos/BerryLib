@@ -245,10 +245,10 @@ end
 
 function PlayerGrazer:render()
     Object.render(self)
-    SetImageState("player_aura", "", Color(0xC0FFFFFF))
-    Render("player_aura", self.x, self.y, -self.aura + self.aura_d, self.move.slow_lh)
-    SetImageState("player_aura", "", Color(0xC0FFFFFF) * self.move.slow_lh + Color(0x00FFFFFF) * (1 - self.move.slow_lh))
-    Render("player_aura", self.x, self.y, self.aura, 2 - self.move.slow_lh)
+    SetImageState("player:aura", "", Color(0xC0FFFFFF))
+    Render("player:aura", self.x, self.y, -self.aura + self.aura_d, self.move.slow_lh)
+    SetImageState("player:aura", "", Color(0xC0FFFFFF) * self.move.slow_lh + Color(0x00FFFFFF) * (1 - self.move.slow_lh))
+    Render("player:aura", self.x, self.y, self.aura, 2 - self.move.slow_lh)
 end
 
 ---@param other lstg.object

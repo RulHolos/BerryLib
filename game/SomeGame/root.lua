@@ -21,7 +21,7 @@ function test_scene:init()
     Task.New(self, function()
         local col = 1
         for _ = 0, INF do
-            Bullet.fire("arrow_big", col, 0, 0, 1.8, 0, true)
+            --Bullet.fire("arrow_big", col, 0, 0, 1.8, 0, true)
             Task.Wait(5)
 
             col = wrap(col + 1, 1, 16)

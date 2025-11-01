@@ -2,7 +2,8 @@ local config = require("lib.menu.menuConfig")
 
 local assets = {
     bullet = require("assets.bullets"),
-    player = require("assets.player")
+    player = require("assets.player"),
+    misc = require("assets.misc"),
 }
 
 local resdesc = {}

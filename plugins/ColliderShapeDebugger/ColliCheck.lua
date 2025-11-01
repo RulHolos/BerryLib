@@ -35,7 +35,7 @@ function Collision_Checker.init()
     end, 1000)
 end
 function Collision_Checker.frame()
-    if KeyIsPressed("Special", true) then
+    if KeyIsPressed("Special") then
         toggle = not toggle
     end
 end
