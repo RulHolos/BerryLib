@@ -11,6 +11,8 @@ Vertical UI is not supported in BerryLib by default, only horizontal UI is.
 
 This UI framework is not fit for use with the editor and is code-only.
 If you really wish to edit this UI in editor, may ZUN have mercy on you, and please reconsider your life and sanity (looking at you Ryann...)
+
+This ui framework uses components to build the UI.
 ]]
 
 ---@class berry.UI
@@ -20,21 +22,17 @@ GameUI = M
 CurrentGameUI = nil
 
 function M:init()
-    self.group = GROUP_GHOST
-    self.layer = LAYER_TOP + 2 -- Above all. UI layers are between TOP+1 and TOP+3.
-    self.bound = false
-    self.colli = false
-
-    LoadImageFromFile("ui_bg", "ui/ui_bg.png", false)
+    self.timer = 0
 end
 
 function M:frame()
     Task.Do(self)
+    self.timer = self.timer + 1
 end
 
 function M:render()
     SetViewMode("ui")
-    RenderRect("ui_bg", 0, Screen.width, 0, Screen.height)
+    RenderRect("ui:bg", 0, Screen.width, 0, Screen.height)
 end
 
 function M:del()
@@ -73,6 +71,25 @@ function M.create()
 
     return obj
 end
+
+----------------------------------------------
+--- Components
+
+---@class berry.UI.Component
+---@field name string
+---@field enabled boolean Mostly for debugging purposes.
+---@field priority integer Higher means being executed first
+---@field ui berry.UI Defined when attached
+---@field init fun(self: berry.UI.Component)?
+---@field frame fun(self: berry.UI.Component)?
+---@field render fun(self: berry.UI.Component)?
+---@field onAttach fun(self: berry.UI.Component, ui: berry.UI)?
+---@field onDetach fun(self: berry.UI.Component, ui: berry.UI)?
+---@field debug fun(self: berry.UI.Component)? Optional callback for the Player Debugger in ImGui.
+
+--- Include behaviors here
+local patch = "lib/UI/components/"
+--Include(patch .. "lines.lua")
 
 --=====================--
 --- Signals Callbacks ---
