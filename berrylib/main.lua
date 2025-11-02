@@ -55,6 +55,7 @@ function GameInit()
     end
 
     lstg.plugin.DispatchEvent("afterGame")
+    lstg.Signals:emit("GameInit")
 
     if SceneManager.next_scene == nil then
         error("No entry point scene defined.")
