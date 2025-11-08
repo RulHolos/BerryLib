@@ -112,7 +112,6 @@
 ---| 9 Shader
 ---| 10 Model
 
----@alias ResourcePool "stage"|"global"|"none"
 ---@alias SamplerState "point+wrap"|"point+clamp"|"linear+wrap"|"linear+clamp"
 ---@alias LogLevel
 ---| 0 debug
@@ -149,9 +148,12 @@
 ---@field GetCurrentSuperPause fun(...) Undocumented
 ---@field SetWorldFlag fun(n:integer) Set the current world mask.
 ---@field IsSameWorld fun(a:lstg.object, b:lstg.object) : boolean Checks if two objects are in the same world.
----@field ActiveWorlds fun(a:integer, b:integer, c:integer, d:integer) Set a maximum of 4 active world masks.
+---@field SetActiveWorlds fun(mask:integer) Set a flag for masking allowed active worlds (64 max).
+---@field GetActiveWorlds fun() : integer Returns the current active world bitmask.
 ---@field SetResLoadInfo fun(active:boolean) Activate or deactivate logging for loading resources.
----@field SetResourceStatus fun(pool:ResourcePool) Set a scope pool for loading resources.
+---@field CreateResourcePool fun(name:string) Creates a resource pool for loading resource. Can be used in `SetResourceStatus` and `RemoveResource`.
+---@field RemoveResourcePool fun(name:string) Deletes a resource pool and frees all the resources created in its scope.
+---@field SetResourceStatus fun(pool:string) Set a scope pool for loading resources.
 ---@field GetResourceStatus fun() : string Returns the current scope pool for loading resources.
 ---@field LoadTexture fun(name:string, path:string, mipmap:boolean?) Loads a texture resource from a file.
 ---@field LoadImage fun(name:string, tex_name:string, x:number, y:number, width:number, height:number, a:number?, b:number?, rect:boolean?) Loads an image from a texture with optional collision parameters.
@@ -165,9 +167,9 @@
 ---@field LoadModel fun(name:string, path:string) Loads a model. Supported formats are `gltf`, `glb`.
 ---@field CreateRenderTarget fun(name:string, width:number?, height:number?) Creates a render target. Will be treated as a texture resource.
 ---@field Color lstg.Color
----@field RemoveResource fun(poolType:ResourcePool) Clears a resource pool. If a resource is in use, it will not be freed until it's not used anymore.
----@field RemoveResource fun(poolType:ResourcePool, resType:ResourceType, name:string) Removes a resource from a pool. If a resource is in use, it will not be freed until it's not used anymore.
----@field CheckRes fun(resType:ResourceType, name:string) : ResourcePool Returns name of the pool where a resource is located. Usually used to check if a resource exists.
+---@field RemoveResource fun(poolType:string) Clears a resource pool. If a resource is in use, it will not be freed until it's not used anymore.
+---@field RemoveResource fun(poolType:string, resType:ResourceType, name:string) Removes a resource from a pool. If a resource is in use, it will not be freed until it's not used anymore.
+---@field CheckRes fun(resType:ResourceType, name:string) : string Returns name of the pool where a resource is located. Usually used to check if a resource exists.
 ---@field EnumRes fun(resType:ResourceType) : table, table Returns array of all the resource names in `global` and `stage` pools respectively.
 ---@field ParticleSystemData fun(...) Undocumented
 ---@field SetImageState fun(name:string, blendmode:BlendMode, color:lstg.Color?, color2:lstg.Color?, color3:lstg.Color?, color4:lstg.Color?) Sets the parameters of an image or texture resource.
@@ -388,8 +390,11 @@ AddSuperPause = lstg.AddSuperPause
 GetCurrentSuperPause = lstg.GetCurrentSuperPause
 SetWorldFlag = lstg.SetWorldFlag
 IsSameWorld = lstg.IsSameWorld
-ActiveWorlds = lstg.ActiveWorlds
+SetActiveWorlds = lstg.SetActiveWorlds
+GetActiveWorlds = lstg.GetActiveWorlds
 SetResLoadInfo = lstg.SetResLoadInfo
+CreateResourcePool = lstg.CreateResourcePool
+RemoveResourcePool = lstg.RemoveResourcePool
 SetResourceStatus = lstg.SetResourceStatus
 GetResourceStatus = lstg.GetResourceStatus
 LoadTexture = lstg.LoadTexture
