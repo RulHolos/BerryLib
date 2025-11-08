@@ -5,7 +5,7 @@ lstg.plugin.DispatchEvent("beforeLib")
 Include("util/util.lua")
 Include("lib/UI/ui.lua")
 Include("lib/players/player_system.lua")
-Include("lib/menu/loadingScene.lua")
+Include("lib/menu/LoadingScene.lua")
 Include("lib/bullets/bullet.lua")
 
 ---
