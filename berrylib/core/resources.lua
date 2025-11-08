@@ -310,3 +310,17 @@ function Loader.loadFrame()
         current_mgr:load()
     end
 end
+
+-----------------------
+
+---Makes the resource pool switch to `pool` before returning to the old one.
+---
+---Basically load a resource with a pool resource context.
+---@param pool string Resource pool name
+---@param f fun() What to load
+function WithResourceCtx(pool, f)
+    local ctx = GetResourceStatus()
+    SetResourceStatus(pool)
+    f()
+    SetResourceStatus(ctx)
+end
