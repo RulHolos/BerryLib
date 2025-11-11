@@ -1,6 +1,6 @@
 # 🍓 BerryLib
 
-Berrylib is a LuaSTG library designed to be compatible with the most recent version of [LuaSTG-Sub](https://github.com/Legacy-LuaSTG-Engine/LuaSTG-Sub) and [LuaSTG-Flux](https://github.com/RulHolos/LuaSTG-Flux)
+Berrylib is a LuaSTG library designed to be compatible with the most recent version of [LuaSTG-Flux](https://github.com/RulHolos/LuaSTG-Flux). This library doesn't support any other branches as of currently.
 
 Its main goal is to be a solid replacement for [THlib](https://github.com/Legacy-LuaSTG-Engine/Bundle-After-Ex-Plus) which is now starting to get old and got recently archived. I wanted a more modern approach to an engine I love to death.
 
