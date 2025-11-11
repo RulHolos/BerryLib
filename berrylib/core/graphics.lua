@@ -55,6 +55,24 @@ function CreatePlayfieldData()
     Screen.playfield.xoffset = 32 -- Those two a values are the offset of the playfield in relation to the render context.
     Screen.playfield.yoffset = 16
 
+    -- Read only fields.
+
+    Screen.playfield.left = -(Screen.playfield.width / 2)
+    Screen.playfield.right = (Screen.playfield.width / 2)
+    Screen.playfield.bottom = -(Screen.playfield.height / 2)
+    Screen.playfield.top = (Screen.playfield.height / 2)
+
+    Screen.playfield.screen_left    = Screen.playfield.xoffset
+    Screen.playfield.screen_right   = Screen.playfield.xoffset + Screen.playfield.width
+    Screen.playfield.screen_bottom  = Screen.playfield.yoffset
+    Screen.playfield.screen_top     = Screen.playfield.yoffset + Screen.playfield.height
+
+    Screen.playfield.screen_x = {
+        left = Screen.playfield.screen_left,
+        right = Screen.playfield.screen_right,
+        center = Screen.playfield.xoffset + (Screen.playfield.width / 2)
+    }
+
     local w = Screen.playfield
 
     SetBound(
@@ -231,6 +249,10 @@ function GetPlayfieldScreenCoords()
     local t = (w.height / 2)
 
     return l, r, b, t
+end
+
+function WorldToUI(x, y)
+    local w = Screen.playfield
 end
 
 CreateScreenData()
