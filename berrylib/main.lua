@@ -20,7 +20,9 @@ lstg.DoFile("core/global.lua")
 
 lstg.DoFile("backgrounds/bgs.lua")
 
+lstg.DoFile("util/util.lua")
 lstg.DoFile("lib/lib.lua")
+
 ---@type lstg.debug.manager
 Include("debug/view.lua")
 

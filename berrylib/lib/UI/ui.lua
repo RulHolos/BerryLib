@@ -21,47 +21,98 @@ GameUI = M
 ---@type berry.UI|nil
 CurrentGameUI = nil
 
+---@type berry.UI.Component[]
+local BaseUIComponents = {}
+
 function M:init()
     self.timer = 0
+
+    ---@type berry.UI.Component[]
+    self.components = {}
+    for _, v in pairs(BaseUIComponents) do
+        self:attachComponent(v)
+    end
 end
 
 function M:frame()
     Task.Do(self)
+
+    for _, component in ipairs(self.components) do
+        if component.frame then
+            component:frame()
+        end
+    end
+
     self.timer = self.timer + 1
 end
 
 function M:render()
     SetViewMode("ui")
-    RenderRect("ui:bg", 0, Screen.width, 0, Screen.height)
+    for _, component in ipairs(self.components) do
+        if component.render then
+            component:render()
+        end
+    end
+end
+
+function M:kill()
+    Del(self)
 end
 
 function M:del()
+    for _, v in ipairs(self.components) do
+        self:detachComponent(v.name)
+    end
+
     CurrentGameUI = nil
 end
 
-function M:formatScore(score)
-    local function formatnum(num)
-        local sign = sign(num)
-        num = abs(num)
-        local tmp, var = {}, nil
-        while num >= 1000 do
-            var = num - int(num / 1000) * 1000
-            table.insert(tmp, 1, ("%03d"):format(var))
-            num = int(num / 1000)
-        end
-        table.insert(tmp, 1, tostring(num))
-        var = table.concat(tmp, ".")
-        if sign < 0 then
-            var = ("-%s"):format(var)
-        end
-        return var, #tmp - 1
+---@param component berry.UI.Component
+function M:attachComponent(component)
+    component = makeInstance(component)
+    component.ui = self
+    if component.init then
+        component:init()
+    end
+    if not component or not component.name then
+        error("Component must have a name or object is invalid.")
+    end
+    if component.onAttach then
+        component:onAttach(self)
     end
 
-    if score < 1000000000000 then
-        return formatnum(score)
-    else
-        return string.format("999.999.999.999")
+    table.insert(self.components, component)
+    table.sort(self.components, function(a, b)
+        return (a.priority or 0) > (b.priority or 0)
+    end)
+end
+
+---@param name string name of the component
+function M:detachComponent(name)
+    local component = self.components[name]
+    if component and component.onDetach then
+        component:onDetach(self)
     end
+    self.components[name] = nil
+end
+
+---@param name string name of the component
+---@return berry.UI.Component
+function M:getComponent(name)
+    local b
+    for _, v in ipairs(self.components) do
+        if v.name == name then
+            b = v
+        end
+    end
+    if b == nil then
+        error(("The component named %s doesn't exist"):format(name))
+    end
+    return b
+end
+
+function M.registerBaseComponent(component)
+    BaseUIComponents[component.name] = component
 end
 
 function M.create()
@@ -89,7 +140,9 @@ end
 
 --- Include behaviors here
 local patch = "lib/UI/components/"
---Include(patch .. "lines.lua")
+Include(patch .. "lines.lua")
+Include(patch .. "frame.lua")
+Include(patch .. "score.lua")
 
 --=====================--
 --- Signals Callbacks ---
