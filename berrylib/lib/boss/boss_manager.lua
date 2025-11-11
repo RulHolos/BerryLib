@@ -36,10 +36,12 @@ end
 
 function M:frame()
     Task.Do(self)
+
+    self.card_system:frame()
 end
 
 function M:render()
-
+    self.card_system:render()
 end
 
 ---Adds a new boss instance to this manager.
@@ -86,11 +88,11 @@ function M:foreachBoss(wait, internal_wait, f)
     local actions_to_do, actions_done = #self.bosses, 0
     for _, b in ipairs(self.bosses) do
         if internal_wait then
-            f(boss)
+            f(b)
             actions_done = actions_done + 1
         else
             Task.New(self, function()
-                f(boss)
+                f(b)
                 actions_done = actions_done + 1
             end)
         end

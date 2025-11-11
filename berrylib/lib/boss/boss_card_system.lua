@@ -79,7 +79,9 @@ function M:goToNext(cast)
             self.manager.boss_ui:cast_spell()
         end
 
-        
+        while self.current_card.hp > 0 do
+            Task.Wait(1)
+        end
     end
 
     while self.current_card.hp > 0 do
@@ -89,7 +91,7 @@ function M:goToNext(cast)
     self.current_card:beforedel()
     self.current_card:del()
     if not self.current_card.is_non_spell and self.manager.boss_ui.spell_bg ~= nil then
-        bg.fade_out(self.manager.boss_ui.spell_bg, 60)
+        --bg.fade_out(self.manager.boss_ui.spell_bg, 60)
     end
     self.current_card:afterdel()
     self.current_card = nil
