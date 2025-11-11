@@ -1,11 +1,11 @@
----@class berry.boss.boss : lstg.object
-local M = Class(Object)
+---@class berry.boss.boss : berry.enemy_base
+local M = Class(EnemyBase)
 
 ---@param name string Full name of the boss
 ---@param img string Image name of the boss
 ---@param x number Initial x pos
 ---@param y number Initial y pos
----@param aura berry.boss.aura|nil
+-----@param aura berry.boss.aura|nil
 ---@param manager berry.boss.boss_manager
 function M:init(name, img, x, y, aura, manager)
     self.x, self.y = x, y

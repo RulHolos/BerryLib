@@ -1,3 +1,29 @@
+---@class berry.enemy.death : lstg.object
+local enemyDeath = Class(Object)
+
+function enemyDeath:init(index, x, y)
+    self.img = "bubble" .. index
+    self.layer = LAYER_ENEMIES + 50
+    self.group = GROUP_GHOST
+    self.x, self.y = x, y
+    PlaySound("enep00", 0.3, self.x / (Screen.playfield.width / 2))
+end
+
+function enemyDeath:frame()
+    if self.timer == 30 then
+        Del(self)
+    end
+end
+
+function enemyDeath:render()
+    local alpha = 1 - self.timer / 30
+    alpha = 255 * alpha ^ 2
+    SetImageState(self.img, "", Color(alpha, 255, 255, 255))
+    Render(self.img, self.x, self.y, 15, 0.4 - self.timer * 0.01, self.timer * 0.1 + 0.7)
+    Render(self.img, self.x, self.y, 75, 0.4 - self.timer * 0.01, self.timer * 0.1 + 0.7)
+    Render(self.img, self.x, self.y, 135, 0.4 - self.timer * 0.01, self.timer * 0.1 + 0.7)
+end
+
 ---@class berry.enemy_base : lstg.object
 EnemyBase = Class(Object)
 
@@ -67,9 +93,9 @@ function EnemyBase:damage(dmg)
 end
 
 function EnemyBase:kill()
-    New(EnemyDeath, self.x, self.y)
+    New(enemyDeath, self.x, self.y)
     if self.drop then
-        --item.dropItem(self.x, self.y, self.drop)
+        item.dropItem(self.x, self.y, self.drop)
     end
 
     for _, unit in ipairs(self.servants) do
