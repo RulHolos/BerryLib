@@ -14,6 +14,10 @@ Or,
 
 You can clone BerryLib using `git clone --recurse-submodules https://github.com/RulHolos/BerryLib.git` in a cmd at the root of your engine executable, if you have git installed.
 
+Or,
+
+If you have downloaded the "berrylib" release package of [LuaSTG-Flux](https://github.com/RulHolos/LuaSTG-Flux), the latest version of BerryLib (at the time of the Flux release) is packaged with it.
+
 And... that's it!
 
 ## 📂 Library Structure
