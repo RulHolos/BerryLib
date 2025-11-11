@@ -5,9 +5,9 @@ function BG_Temple:init()
 	Background.init(self, false)
 
 	-- resources
-	LoadImageFromFile('temple_road', 'backgrounds\\temple\\road.png')
-	LoadImageFromFile('temple_ground', 'backgrounds\\temple\\ground.png')
-	LoadImageFromFile('temple_pillar', 'backgrounds\\temple\\pillar.png')
+	LoadImageFromFile('temple_road', 'backgrounds/temple/road.png')
+	LoadImageFromFile('temple_ground', 'backgrounds/temple/ground.png')
+	LoadImageFromFile('temple_pillar', 'backgrounds/temple/pillar.png')
 
 
 	Set3D('eye', 0, 2.5, -4)

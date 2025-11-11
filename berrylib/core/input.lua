@@ -83,7 +83,7 @@ lstg.GetMousePosition = GetMousePosition
 ---@param right number
 ---@param bottom number
 ---@param top number
----@retrun boolean
+---@return boolean
 function IsMouseInRect(left, right, bottom, top)
     local x, y = GetMousePosition()
     local xRect = x > left and x < right
