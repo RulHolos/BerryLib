@@ -20,6 +20,8 @@ function PlayerSystem:init()
     self.in_dialog = false
     self.collect_line = 96
 
+    self.grazer = New(PlayerGrazer, self)
+
     self.attachBehavior = PlayerSystem.attachBehavior
     self.detachBehavior = PlayerSystem.detachBehavior
     self.getBehavior = PlayerSystem.getBehavior
@@ -41,7 +43,7 @@ function PlayerSystem:init()
         end
     end)
 
-    self.grazer = New(PlayerGrazer, self)
+    lstg.Signals:emit("PlayerSystem:PlayerInstanciated", self)
 end
 
 -- TODO: Change those 4 calls to signals.
