@@ -4,7 +4,8 @@ local assets = {
     bullet = require("assets.bullets"),
     player = require("assets.player"),
     misc = require("assets.misc"),
-    ui = require("assets.ui")
+    ui = require("assets.ui"),
+    items = require("assets.items"),
 }
 
 local resdesc = {}

@@ -22,7 +22,9 @@ function test_scene:init()
         local col = 1
         for _ = 0, INF do
             --Bullet.fire("arrow_big", col, 0, 0, 1.8, 0, true)
-            Task.Wait(5)
+            New(item_power, -100, 120)
+            New(item_point, 100, 120)
+            Task.Wait(30)
 
             col = wrap(col + 1, 1, 16)
         end

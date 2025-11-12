@@ -1,4 +1,5 @@
 ---@class berry.item : lstg.object
+---@field collect fun(self:berry.item, other)?
 item = Class(Object)
 
 function item:init(x, y, t, v, angle)
@@ -11,8 +12,8 @@ function item:init(x, y, t, v, angle)
     self.group = GROUP_ITEM
     self.layer = LAYER_ITEMS
     self.bound = false
-    self.img = t
-    self.imgup = t .. "_up"
+    self.img = "item_" .. t
+    self.imgup = "item_up_" .. t
     self.attract = 0
 end
 
@@ -38,7 +39,7 @@ function item:frame()
     else
         self.vy = max(self.dy - 0.03, -0.05)
     end
-    if self.y < -(Screen.playfield.height / 2) + Screen.playfield.boundOffset then
+    if self.y < -(Screen.playfield.height / 2) - Screen.playfield.boundOffset then
         Del(self)
     end
     if self.attract >= 8 then
@@ -52,7 +53,7 @@ function item:render()
             Render(self.imgup, self.x, (Screen.playfield.height / 2) - 8)
         end
     else
-        Render(self.img, self.x, self.y, self.rot, 0.28)
+        Render(self.img, self.x, self.y, self.rot)
     end
 end
 
@@ -87,6 +88,28 @@ function item.dropItem(x, y, dropTable)
 end
 
 -------------------- Actual items
+
+---@class berry.item_power : berry.item
+item_power = Class(item)
+function item_power:init(x, y, v, a)
+    item.init(self, x, y, 1, v, a)
+end
+function item_power:collect()
+    --GetPower() -- TODO
+end
+
+---@class berry.item_point : berry.item
+item_point = Class(item)
+function item_point:init(x, y)
+    item.init(self, x, y, 2)
+end
+function item_point:collect()
+    if self.attract == 8 then
+        lstg.var.score = lstg.var.score + 10
+    else
+        lstg.var.score = lstg.var.score + 20
+    end
+end
 
 ---@class berry.item_extend : berry.item
 item_extend = Class(item)
