@@ -108,6 +108,8 @@ function M:doState1()
     self.deathee[1] = New(Death_Eff, self.player.x, self.player.y, "first")
     self.deathee[2] = New(Death_Eff, self.player.x, self.player.y, "second")
     New(Death_Eff2, self.player.x, self.player.y)
+
+    lstg.Signals:emit("player_system:death")
 end
 
 function M:doState2()

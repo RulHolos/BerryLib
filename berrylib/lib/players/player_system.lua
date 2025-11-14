@@ -161,6 +161,7 @@ end
 local patch = "lib/players/base_behaviors/"
 Include(patch .. "move.lua")
 Include(patch .. "death.lua")
+Include(patch .. "power.lua")
 
 ----------------------------------------------
 --- Players

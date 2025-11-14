@@ -95,7 +95,7 @@ function item_power:init(x, y, v, a)
     item.init(self, x, y, 1, v, a)
 end
 function item_power:collect()
-    --GetPower() -- TODO
+    lstg.Signals:emit("item:getPower", 1)
 end
 
 ---@class berry.item_point : berry.item
