@@ -37,7 +37,12 @@ function M:frame()
 end
 
 function M:debug()
-    success, value = ImGui.InputInt("Current Power value", self.current_power, 1, 5, "%.1f")
+    success, value = ImGui.InputInt("Current Power value", self.current_power, 1, 5)
+    if success then
+        self.current_power = clamp(value, self.min_power, self.max_power)
+    end
+
+    success, value = ImGui.InputInt("Current Power Scale", self.current_power, 100, 100)
     if success then
         self.current_power = clamp(value, self.min_power, self.max_power)
     end
