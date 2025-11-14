@@ -2,6 +2,7 @@ local patch = "lib.players.reimu_player.behaviors."
 local shoot = require(patch .. "shoot")
 local render = require(patch .. "render")
 local spell = require(patch .. "spell")
+local support = require(patch .. "support")
 
 ---@class lstg.Player.ReimuPlayer : lstg.Player
 ReimuPlayer = Class(PlayerSystem)
@@ -22,6 +23,7 @@ function ReimuPlayer:init()
     self:attachBehavior(render)
     self:attachBehavior(shoot)
     self:attachBehavior(spell)
+    self:attachBehavior(support)
 
     self:getBehavior("Move").normal_speed = 4.5
 end
