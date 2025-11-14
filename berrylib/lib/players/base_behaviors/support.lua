@@ -64,7 +64,7 @@ local function lerp(a, b, f)
 end
 
 function M:frame()
-    local level = clamp(int(self.power.current_power) / 100, 0, 4)
+    local level = clamp(int(self.power.current_power / 100), 0, 4)
 
     local new_focused = self.move.focus == 1
     if self._prev_focus == nil then
@@ -114,7 +114,7 @@ function M:frame()
 end
 
 function M:beginFocusChange(targetFocused)
-    local level = clamp(int(self.power.current_power) / 100, 0, 4)
+    local level = clamp(int(self.power.current_power / 100), 0, 4)
     local target_src_table = (targetFocused and self.focused_positions) or self.unfocused_positions
     local target_src = target_src_table[level] or {}
     if not target_src then
@@ -151,7 +151,7 @@ function M:beginFocusChange(targetFocused)
 end
 
 function M:updateFocusChange()
-    local level = clamp(int(self.power.current_power) / 100, 0, 4)
+    local level = clamp(int(self.power.current_power / 100), 0, 4)
     local all_done = true
     for i, entry in pairs(self._focus_change_entries) do
         entry.progress = math.min(1, entry.progress + self.change_focus_speed)
