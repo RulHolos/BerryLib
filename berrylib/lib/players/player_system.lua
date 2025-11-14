@@ -129,9 +129,9 @@ function PlayerSystem:getBehavior(name)
             b = v
         end
     end
-    if b == nil then
-        error(("The behavior named %s doesn't exist"):format(name))
-    end
+    --if b == nil then
+    --    error(("The behavior named %s doesn't exist"):format(name))
+    --end
     return b
 end
 

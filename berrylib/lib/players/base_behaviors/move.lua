@@ -78,7 +78,7 @@ end
 ---@param key_name KnownKeys
 ---@param is_down boolean
 function M:OnKeyAction(key_name, is_down)
-    if key_name == "Focus" then
+    if key_name == "Focus" and not self.lock then
         if is_down then
             self.focus = 1
         else
@@ -112,7 +112,12 @@ function M:debug()
 
     _, self.force_focus = ImGui.Checkbox("Force focus", self.force_focus)
     _, self.lock = ImGui.Checkbox("Lock movement", self.lock)
+    local before = self.restrict_to_bounds
     _, self.restrict_to_bounds = ImGui.Checkbox("Restrict to Bounds", self.restrict_to_bounds)
+    local after = self.restrict_to_bounds
+    if before ~= after then
+        self.player.bound = self.restrict_to_bounds
+    end
 end
 
 BasePlayerBehaviors[M.name] = M

@@ -14,12 +14,13 @@ function M:init()
     ---@type lstg.Player.Behavior.Move
     ---@diagnostic disable-next-line: assign-type-mismatch
     self.move = self.player:getBehavior("Move")
-end
 
-function M:frame()
     ---@type lstg.Player.Behavior.Death
     ---@diagnostic disable-next-line: assign-type-mismatch
     self.death = self.player:getBehavior("Death")
+end
+
+function M:frame()
     if not self.death.canAct(self.death) then
         return
     end

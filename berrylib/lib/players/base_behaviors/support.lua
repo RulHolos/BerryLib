@@ -1,4 +1,4 @@
-local easing = require("util.easing")
+local easing = require("berrylib.util.easing")
 
 ---@class lstg.Player.Behavior.Support : lstg.Player.Behavior
 local M = {}
@@ -10,6 +10,8 @@ function M:init()
     -- For an example on how to use them, see the reimu player's definition of them.
     self.unfocused_positions = {}
     self.focused_positions = {}
+
+    self.number_of_supports = 0
 
     self.focused = false
 
@@ -35,6 +37,15 @@ function M:init()
 
     self.beginFocusChange = M.beginFocusChange
     self.updateFocusChange = M.updateFocusChange
+    self.doFor = M.doFor
+
+    ---@type lstg.Player.Behavior.Power
+    ---@diagnostic disable-next-line: assign-type-mismatch
+    self.power = self.player:getBehavior("Power")
+
+    ---@type lstg.Player.Behavior.Move
+    ---@diagnostic disable-next-line: assign-type-mismatch
+    self.move = self.player:getBehavior("Move")
 end
 
 local function getOffset(off)
@@ -53,14 +64,7 @@ local function lerp(a, b, f)
 end
 
 function M:frame()
-    ---@type lstg.Player.Behavior.Power
-    ---@diagnostic disable-next-line: assign-type-mismatch
-    self.power = self.player:getBehavior("Power")
     local level = clamp(int(self.power.current_power) / 100, 0, 4)
-
-    ---@type lstg.Player.Behavior.Move
-    ---@diagnostic disable-next-line: assign-type-mismatch
-    self.move = self.player:getBehavior("Move")
 
     local new_focused = self.move.focus == 1
     if self._prev_focus == nil then
@@ -175,6 +179,14 @@ function M:updateFocusChange()
         end
         self._focus_change_entries = {}
         self._focus_changing = false
+    end
+end
+
+---@param f fun(index:integer, posX:number, posY:number)
+function M:doFor(f)
+    for i = 1, #self.positions do
+        local p = self.positions[i]
+        f(i, p.x, p.y)
     end
 end
 

@@ -51,7 +51,7 @@ function M:init()
     }
 
     self.move_speed = 0.3
-    self.change_focus_speed = 0.3
+    self.change_focus_speed = 0.2
 
     LoadImage("reimu_support", "reimu_player", 64, 144, 16, 16)
     self.img = "reimu_support"

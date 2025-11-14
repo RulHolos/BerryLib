@@ -22,13 +22,31 @@ function M:init()
     self.next_shoot = self.shoot_timer
     self.fire = false
     self.debug_fire = false
-end
 
-function M:frame()
     ---@type lstg.Player.Behavior.Death
     ---@diagnostic disable-next-line: assign-type-mismatch
     self.death = self.player:getBehavior("Death")
-    if not self.death.canAct(self.death) then
+
+    ---@type lstg.Player.Behavior.Support
+    ---@diagnostic disable-next-line: assign-type-mismatch
+    self.support = self.player:getBehavior("Support")
+
+    ---@type lstg.Player.Behavior.Move
+    ---@diagnostic disable-next-line: assign-type-mismatch
+    self.move = self.player:getBehavior("Move")
+
+    -----------------------------------------
+    LoadImage("reimu_bullet_red", "reimu_player", 192, 160, 64, 16, 16, 16)
+    SetImageState("reimu_bullet_red", "", Color(0xA0FFFFFF))
+    SetImageCenter("reimu_bullet_red", 56, 8)
+    -----------------------------------------
+    LoadImage("reimu_bullet_orange", "reimu_player", 64, 176, 64, 16, 64, 16)
+    SetImageState("reimu_bullet_orange", "", Color(0x80FFFFFF))
+    SetImageCenter("reimu_bullet_orange", 32, 8)
+end
+
+function M:frame()
+    if not self.death.canAct(self.death) or self.player.in_dialog then
         self.next_shoot = clamp(self.next_shoot - 1, 0, self.shoot_timer)
         return
     end
@@ -42,10 +60,18 @@ end
 
 function M:shoot()
     PlaySound('plst00', 0.3, self.player.x / 1024)
-    New(player_bullet, "reimu_bullet_main", self.player.x + 10, self.player.y, 24, 90, 2)
-    New(player_bullet, "reimu_bullet_main", self.player.x - 10, self.player.y, 24, 90, 2)
-
     self.next_shoot = self.shoot_timer
+
+    New(player_bullet, "reimu_bullet_red", self.player.x + 10, self.player.y, 24, 90, 2)
+    New(player_bullet, "reimu_bullet_red", self.player.x - 10, self.player.y, 24, 90, 2)
+    if self.support.number_of_supports > 0 then
+        if self.move.focus == 1 then
+            self.support:doFor(function(i, x, y)
+                New(player_bullet, "reimu_bullet_orange", x - 3, y, 24, 90, 0.3)
+                New(player_bullet, "reimu_bullet_orange", x + 3, y, 24, 90, 0.3)
+            end)
+        end
+    end
 end
 
 ---@param key_name KnownKeys

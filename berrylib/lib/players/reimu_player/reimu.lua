@@ -12,18 +12,15 @@ function ReimuPlayer:init()
     -----------------------------------------
     LoadTexture("reimu_player", "players/reimu_player/reimu.png")
     -----------------------------------------
-    LoadImage("reimu_bullet_main", "reimu_player", 192, 160, 64, 16, 16, 16)
-    SetImageState("reimu_bullet_main", "", Color(0xA0FFFFFF))
-    SetImageCenter("reimu_bullet_main", 56, 8)
-    -----------------------------------------
 
     self.name = "Reimu"
     self.A, self.B = 0.5, 0.5
 
-    self:attachBehavior(render)
-    self:attachBehavior(shoot)
-    self:attachBehavior(spell)
+    -- Order matters
     self:attachBehavior(support)
+    self:attachBehavior(render)
+    self:attachBehavior(spell)
+    self:attachBehavior(shoot)
 
     self:getBehavior("Move").normal_speed = 4.5
 end
