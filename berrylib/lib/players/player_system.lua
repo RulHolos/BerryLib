@@ -32,6 +32,12 @@ function PlayerSystem:init()
     for _, v in pairs(BasePlayerBehaviors) do
         self:attachBehavior(v)
     end
+    for _, v in pairs(self.behaviors) do
+        if v.init then
+            v:init()
+        end
+    end
+    self.behaviors_initialized = true
 
     ---@param key_name KnownKeys
     ---@param is_down boolean
@@ -89,7 +95,7 @@ end
 function PlayerSystem:attachBehavior(behavior)
     behavior = makeInstance(behavior)
     behavior.player = self
-    if behavior.init then
+    if behavior.init and self.behaviors_initialized then
         behavior:init()
     end
     if not behavior or not behavior.name then
