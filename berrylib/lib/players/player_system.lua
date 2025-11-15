@@ -26,6 +26,7 @@ function PlayerSystem:init()
     self.detachBehavior = PlayerSystem.detachBehavior
     self.getBehavior = PlayerSystem.getBehavior
     self.AfterFrame = PlayerSystem.AfterFrame
+    self.findTarget = PlayerSystem.findTarget
 
     ---@type lstg.Player.Behavior[]
     self.behaviors = {}
@@ -55,6 +56,8 @@ end
 -- TODO: Change those 4 calls to signals.
 
 function PlayerSystem:frame()
+    self:findTarget()
+
     for _, behavior in ipairs(self.behaviors) do
         if behavior.frame then
             behavior:frame()
@@ -143,6 +146,40 @@ function PlayerSystem:kill()
     lstg.var.player = nil
 
     Del(self)
+end
+
+---Finds the first possible target enemy/nonjtj/boss object and returns it.
+---
+---Also stores it in `self.target`
+---@return lstg.object @The current target object.
+function PlayerSystem:findTarget()
+    self.target = nil
+    local maxpri = -1
+
+    ---@param obj lstg.object
+    local function test(obj)
+        if obj.colli then
+            local dx = self.x - obj.x
+            local dy = self.y - obj.y
+            local pri = abs(dy) / (abs(dx) + 0.01)
+            if pri > maxpri then
+                maxpri = pri
+                self.target = obj
+            end
+        end
+    end
+
+    for _, o in ObjList(GROUP_ENEMY) do
+        test(o)
+    end
+    for _, o in ObjList(GROUP_NONTJT) do
+        test(o)
+    end
+    for _, o in ObjList(GROUP_BOSS) do
+        test(o)
+    end
+
+    return self.target
 end
 
 ----------------------------------------------

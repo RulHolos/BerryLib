@@ -138,3 +138,14 @@ function Bullet.fire(bullet_type, color, x, y, v, ang, aim, indes, wait)
     end
     return b
 end
+
+function Bullet.bombDeleter(kill_indes)
+    for _, v in ObjList(GROUP_ENEMY_BULLET) do
+        Kill(v)
+    end
+    if kill_indes then
+        for _, v in ObjList(GROUP_INDES) do
+            Kill(v)
+        end
+    end
+end

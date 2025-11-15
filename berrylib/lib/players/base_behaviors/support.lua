@@ -19,14 +19,14 @@ function M:init()
     self.positions = {}
 
     ---Interpolation speed in range [0, 1].
-    self.move_speed = 0.2
+    self.move_speed = 0.3
+    self.change_focus_speed = 0.2 -- Different impact than move_speed because it's a progress value step.
 
     ---@type fun(t:integer)
     self.move_function = easing.linear
     ---@type fun(t:integer)
     self.change_focus_function = easing.linear
 
-    self.change_focus_speed = 0.08
     self._focus_change_entries = {}
     self._focus_changing = false
     self._prev_focus = nil
