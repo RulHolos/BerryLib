@@ -268,4 +268,10 @@ function IsInPlayfield(obj)
     )
 end
 
+function WorldToUI(x, y)
+    local w = Screen.playfield
+    return w.screen_left + (w.screen_right - w.screen_left) * (x - w.left) / (w.right - w.left),
+        w.screen_bottom + (w.screen_top - w.screen_bottom) * (y - w.bottom) / (w.top - w.bottom)
+end
+
 CreateScreenData()

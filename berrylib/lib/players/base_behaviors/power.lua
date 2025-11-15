@@ -19,6 +19,9 @@ function M:init()
     end
 
     lstg.Signals:register("item:getPower", "player_system:getPower", function(amount)
+        if amount == -1 then
+            amount = self.max_power
+        end
         local before = int(self.current_power / 100)
         self.current_power = clamp(self.current_power + amount, self.min_power, self.max_power)
         local after = int(self.current_power / 100)

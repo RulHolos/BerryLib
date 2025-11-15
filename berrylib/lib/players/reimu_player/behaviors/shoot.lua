@@ -1,3 +1,61 @@
+--#region Bullet effects
+
+local reimu_bullet_ef = Class(Object)
+function reimu_bullet_ef:init(x, y, rot)
+    self.x, self.y = x, y
+    self.rot = rot
+    self.img = "reimu_bullet_orange_ef"
+    self.layer = LAYER_PLAYER_BULLETS + 50
+    self.group = GROUP_GHOST
+    self.vy = 2
+    self.hscale = ran:Float(1.4, 1.6)
+end
+function reimu_bullet_ef:frame()
+    if self.timer > 15 then
+        self.x = 600
+        Del(self)
+    end
+end
+function reimu_bullet_ef:render()
+    SetImageState(self.img, "mul+add", Color(255 - 255 * self.timer / 16, 255, 255, 255))
+    Object.render(self)
+end
+
+local reimu_bullet_ef2 = Class(Object)
+function reimu_bullet_ef2:init(x, y)
+    self.x, self.y = x, y
+    self.rot = -90 + ran:Float(-10, 10)
+    self.img = "reimu_bullet_orange_ef2"
+    self.layer = LAYER_PLAYER_BULLETS + 50
+    self.group = GROUP_GHOST
+    self.hscale = ran:Float(1.5, 1.8)
+    self.vscale = 1.5
+end
+function reimu_bullet_ef2:frame()
+    if self.timer >= 9 then
+        self.x = 600
+        Del(self)
+    end
+end
+
+local reimu_bullet_blue_ef = Class(Object)
+function reimu_bullet_blue_ef:init(x, y, rot)
+    self.x, self.y = x, y
+    self.rot = rot
+    self.img = "reimu_bullet_blue_ef"
+    self.layer = LAYER_PLAYER_BULLETS + 50
+    self.group = GROUP_GHOST
+    self.vx = cos(rot)
+    self.vy = sin(rot)
+end
+function reimu_bullet_blue_ef:frame()
+    if self.timer > 14 then
+        Del(self)
+    end
+end
+
+--#endregion
+--#region Bullet types
 local player_bullet = Class(Object)
 function player_bullet:init(img, x, y, v, angle, dmg)
     self.group = GROUP_PLAYER_BULLET
@@ -12,6 +70,46 @@ function player_bullet:init(img, x, y, v, angle, dmg)
         self.rect = true
     end
 end
+function player_bullet:kill()
+    New(reimu_bullet_ef, self.x, self.y, self.rot + 180 + ran:Float(-15, 15))
+    New(reimu_bullet_ef2, self.x, self.y)
+end
+
+local player_bullet_blue = Class(Object)
+function player_bullet_blue:init(img, x, y, v, angle, trail, dmg, player)
+    self.group = GROUP_PLAYER_BULLET
+    self.layer = LAYER_PLAYER_BULLETS
+    self.img = img
+    self.x, self.y = x, y
+    self.rot = angle
+    self.v = v
+    self.trail = trail
+    self.dmg = dmg
+    self.player = player
+    if self.a ~= self.b then
+        self.rect = true
+    end
+end
+function player_bullet_blue:frame()
+    if IsValid(self.player.target) and self.player.target.colli then
+        local a = math.mod(Angle(self, self.player.target) - self.rot + 720, 360)
+        if a > 180 then
+            a = a - 360
+        end
+        local da = self.trail / (Dist(self, self.player.target) + 1)
+        if da >= abs(a) then
+            self.rot = Angle(self, self.player.target)
+        else
+            self.rot = self.rot + sign(a) * da
+        end
+    end
+    self.vx = self.v * cos(self.rot)
+    self.vy = self.v * sin(self.rot)
+end
+function player_bullet_blue:kill()
+    New(reimu_bullet_blue_ef, self.x, self.y, self.rot)
+end
+--#endregion
 
 ---@class lstg.Player.Reimu.Behavior.Shoot : lstg.Player.Behavior
 local M = {}
@@ -40,9 +138,21 @@ function M:init()
     SetImageState("reimu_bullet_red", "", Color(0xA0FFFFFF))
     SetImageCenter("reimu_bullet_red", 56, 8)
     -----------------------------------------
-    LoadImage("reimu_bullet_orange", "reimu_player", 64, 176, 64, 16, 64, 16)
-    SetImageState("reimu_bullet_orange", "", Color(0x80FFFFFF))
-    SetImageCenter("reimu_bullet_orange", 32, 8)
+    LoadTexture("reimu_orange_ef2", "players/reimu_player/reimu_orange_eff.png")
+    LoadImage('reimu_bullet_orange', 'reimu_player', 64, 176, 64, 16, 64, 16)
+	SetImageState('reimu_bullet_orange', '', Color(0x80FFFFFF))
+	SetImageCenter('reimu_bullet_orange', 32, 8)
+	LoadImage('reimu_bullet_orange_ef', 'reimu_player', 64, 176, 64, 16, 64, 16)
+	SetImageState('reimu_bullet_orange_ef', '', Color(0x80FFFFFF))
+	SetImageCenter('reimu_bullet_orange_ef', 32, 8)
+	LoadAnimation('reimu_bullet_orange_ef2', 'reimu_orange_ef2', 0, 0, 64, 16, 1, 9, 1)
+	SetAnimationCenter('reimu_bullet_orange_ef2', 0, 8)
+	SetAnimationState('reimu_bullet_orange_ef2', 'mul+add', Color(255, 255, 155, 155))
+    -----------------------------------------
+    LoadImage("reimu_bullet_blue", "reimu_player", 0, 160, 16, 16, 16, 16)
+    SetImageState("reimu_bullet_blue", "", Color(0x80FFFFFF))
+    LoadAnimation("reimu_bullet_blue_ef", "reimu_player", 0, 160, 16, 16, 4, 1, 4)
+    SetAnimationState("reimu_bullet_blue_ef", "mul+add", Color(0xA0FFFFFF))
 end
 
 function M:frame()
@@ -70,6 +180,12 @@ function M:shoot()
                 New(player_bullet, "reimu_bullet_orange", x - 3, y, 24, 90, 0.3)
                 New(player_bullet, "reimu_bullet_orange", x + 3, y, 24, 90, 0.3)
             end)
+        else
+            if self.player.timer % 8 < 4 then
+                self.support:doFor(function(i, x, y)
+                    New(player_bullet_blue, "reimu_bullet_blue", x, y, 8, 90, 900, 0.7, self.player)
+                end)
+            end
         end
     end
 end
