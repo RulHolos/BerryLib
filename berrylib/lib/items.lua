@@ -118,6 +118,24 @@ function item_power:collect()
     lstg.Signals:emit("item:getPower", 1)
 end
 
+---@class berry.item_power_large : berry.item
+item_power_large = Class(item)
+function item_power_large:init(x, y, v, a)
+    item.init(self, x, y, 6, v, a)
+end
+function item_power_large:collect()
+    lstg.Signals:emit("item:getPower", 100)
+end
+
+---@class berry.item_power_full : berry.item
+item_power_full = Class(item)
+function item_power_full:init(x, y)
+    item.init(self, x, y, 4)
+end
+function item_power_full:collect()
+    lstg.Signals:emit("item:getPower", -1) -- -1 Is treated as full in the player "power" behavior for simplicity.
+end
+
 ---@class berry.item_point : berry.item
 item_point = Class(item)
 function item_point:init(x, y)

@@ -23,6 +23,8 @@ function test_scene:init()
         for _ = 0, INF do
             --Bullet.fire("arrow_big", col, 0, 0, 1.8, 0, true)
             New(item_power, -100, 120)
+            New(item_power_large, -50, 120)
+            New(item_power_full, 50, 120)
             New(item_point, 100, 120)
             Task.Wait(30)
 
