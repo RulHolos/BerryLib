@@ -168,6 +168,7 @@ local patch = "lib/players/base_behaviors/"
 Include(patch .. "move.lua")
 Include(patch .. "death.lua")
 Include(patch .. "power.lua")
+Include(patch .. "collect_items.lua")
 
 ----------------------------------------------
 --- Players
@@ -206,14 +207,21 @@ function PlayerGrazer:init(player)
     self.aura_d = 0
     self._slow_timer = 0
     self._pause = 0
+    self._collectCounter = 0
 
     self.move = nil
     self.death = nil
+
+    LoadTexture("tex:ItemCollectRing", "general/white.png")
+    LoadImageGroup("ItemCollectRing", "tex:ItemCollectRing", 0, 0, 110, 62, 1, 10)
+    for i = 1, 10 do
+        SetImageState("ItemCollectRing" .. i, "mul+add", Color(0x80FFFFFF))
+    end
 end
 
 function PlayerGrazer:frame()
     if not IsValid(self.player) then
-        lstg.MsgBoxWarn("Player invalid")
+        lstg.MsgBoxWarn("Player invalid. Grazer initialized before player. You're doing something wrong somewhere.")
         Del(self)
         return
     end
@@ -234,8 +242,12 @@ function PlayerGrazer:frame()
     end
     if self.move.focus == 1 then
         self._slow_timer = min(self._slow_timer + 1, 30)
+        self._collectCounter = min(self._collectCounter + 1, 20)
+        item.UpdateCollectRingRadius(self._collectCounter)
     else
         self._slow_timer = 0
+        self._collectCounter = max(self._collectCounter - 1, 0)
+        item.UpdateCollectRingRadius(self._collectCounter)
     end
     if self._pause == 0 then
         self.aura = self.aura + 1.5
@@ -258,6 +270,16 @@ function PlayerGrazer:render()
     Render("player:aura", self.x, self.y, -self.aura + self.aura_d, self.move.slow_lh)
     SetImageState("player:aura", "", Color(0xC0FFFFFF) * self.move.slow_lh + Color(0x00FFFFFF) * (1 - self.move.slow_lh))
     Render("player:aura", self.x, self.y, self.aura, 2 - self.move.slow_lh)
+
+    -- Item collection ring effect. Is a plain white texture for base release, but can be changed in PlayerGraze:init.
+    if item.GetCollectRingRadius() >= 8 then
+        misc.RenderRing("ItemCollectRing", self.x, self.y,
+            item.GetCollectRingRadius() - 8,
+            item.GetCollectRingRadius(),
+            -self.timer,
+            50, 10
+        )
+    end
 end
 
 ---@param other lstg.object

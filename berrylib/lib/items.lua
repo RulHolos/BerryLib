@@ -1,4 +1,5 @@
 ---@class berry.item : lstg.object
+---@field target lstg.object Most likely always the player.
 ---@field collect fun(self:berry.item, other)?
 item = Class(Object)
 
@@ -18,7 +19,7 @@ function item:init(x, y, t, v, angle)
 end
 
 function item:frame()
-    local player = lstg.var.player
+    local player = self.target
     if self.timer < 24 then
         self.rot = self.rot + 45
         self.hscale = (self.timer + 25) / 48
@@ -86,6 +87,25 @@ function item.dropItem(x, y, dropTable)
         end
     end
 end
+
+function item.SetCollectRingRadius(radius)
+    item.CollectRingRadius = radius
+end
+
+function item.GetCollectRingRadius()
+    return item.CurrentCollectRingRadius or 0
+end
+
+function item.UpdateCollectRingRadius(timer)
+    local function EaseOutQuad(percent)
+        return 1 - (1 - percent) * (1 - percent)
+    end
+
+    timer = timer / 20
+    item.CurrentCollectRingRadius = EaseOutQuad(timer) * item.CollectRingRadius
+end
+
+item.SetCollectRingRadius(140)
 
 -------------------- Actual items
 
