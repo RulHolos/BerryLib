@@ -43,6 +43,10 @@ function CreateScreenData()
     Screen.resScale = Settings.XResolution / Settings.YResolution
     Screen.scale = math.min(Screen.hScale, Screen.vScale)
 
+    Screen.offset = {
+        x = 0, y = 0
+    }
+
     CreatePlayfieldData()
 
     SetViewMode("ui") -- Just for applying, this isn't for any rendering outside of applying the values.
@@ -147,8 +151,9 @@ function SetViewMode(mode)
         local scrr = w.xoffset + w.width
         local scrb = w.yoffset
         local scrt = w.yoffset + w.height
+        local s = Screen.offset
 
-        SetViewport(scrl * Screen.scale, scrr * Screen.scale, scrb * Screen.scale, scrt * Screen.scale)
+        SetViewport(scrl * Screen.scale + s.x, scrr * Screen.scale + s.x, scrb * Screen.scale + s.y, scrt * Screen.scale + s.y)
         SetPerspective(
             lstg.view3d.eye[1], lstg.view3d.eye[2], lstg.view3d.eye[3],
             lstg.view3d.at[1], lstg.view3d.at[2], lstg.view3d.at[3],
@@ -162,10 +167,11 @@ function SetViewMode(mode)
                 + (lstg.view3d.eye[3] - lstg.view3d.at[3]) ^ 2) ^ 0.5)
                 * 2 * math.tan(lstg.view3d.fovy * 0.5)) / (scrr - scrl))
     elseif mode == "world" then
+        local s = Screen.offset
         local w = Screen.playfield
         SetRenderRect(w.width, w.height,
-            w.xoffset, w.xoffset + w.width,
-            w.yoffset, w.yoffset + w.height,
+            w.screen_left + s.x, w.screen_right + s.x,
+            w.screen_bottom + s.y, w.screen_top + s.y,
             true
         )
     elseif mode == "ui" then
@@ -205,10 +211,10 @@ function SetRenderRect(width, height, scrl, scrr, scrb, scrt, centered)
     SetOrtho(l, r, b, t)
 
     setViewportAndScissorRect(
-        scrl * Screen.scale,
-        scrr * Screen.scale,
-        scrb * Screen.scale,
-        scrt * Screen.scale
+        scrl * Screen.scale + Screen.offset.x,
+        scrr * Screen.scale + Screen.offset.x,
+        scrb * Screen.scale + Screen.offset.y,
+        scrt * Screen.scale + Screen.offset.y
     )
 
     SetFog()
@@ -251,8 +257,15 @@ function GetPlayfieldScreenCoords()
     return l, r, b, t
 end
 
-function WorldToUI(x, y)
-    local w = Screen.playfield
+---@param obj lstg.object
+---@return boolean @BoxCheck result
+function IsInPlayfield(obj)
+    return BoxCheck(obj,
+        Screen.playfield.left,
+        Screen.playfield.right,
+        Screen.playfield.bottom,
+        Screen.playfield.top
+    )
 end
 
 CreateScreenData()
