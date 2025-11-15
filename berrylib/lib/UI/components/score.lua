@@ -13,7 +13,7 @@ local function formatnum(num)
         num = int(num / 1000)
     end
     table.insert(tmp, 1, tostring(num))
-    var = table.concat(tmp, ".")
+    var = table.concat(tmp, ",")
     if sign < 0 then
         var = ("-%s"):format(var)
     end

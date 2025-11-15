@@ -64,6 +64,8 @@ function misc.ShakeScreen(time, scale)
     end
 end
 
+----------------------
+
 LoadTexture("particles", "ui/particles.png")
 LoadImageGroup("parimg", "particles", 0, 0, 32, 32, 4, 4)
 
