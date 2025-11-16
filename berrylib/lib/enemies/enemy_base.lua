@@ -1,12 +1,15 @@
 ---@class berry.enemy.death : lstg.object
 local enemyDeath = Class(Object)
 
-function enemyDeath:init(index, x, y)
-    self.img = "bubble" .. index
+function enemyDeath:init(x, y)
+    if LoadImageFromFile("enm:die", "enemies/enemy_die.png", true) then
+        SetImageCenter("enm:die", 108 / 2, 108 / 2)
+    end
+    self.img = "enm:die"
     self.layer = LAYER_ENEMIES + 50
     self.group = GROUP_GHOST
     self.x, self.y = x, y
-    PlaySound("enep00", 0.3, self.x / (Screen.playfield.width / 2))
+    PlaySound("enep00", 0.3, self.x / (Screen.playfield.width / 2), true)
 end
 
 function enemyDeath:frame()
@@ -18,6 +21,7 @@ end
 function enemyDeath:render()
     local alpha = 1 - self.timer / 30
     alpha = 255 * alpha ^ 2
+
     SetImageState(self.img, "", Color(alpha, 255, 255, 255))
     Render(self.img, self.x, self.y, 15, 0.4 - self.timer * 0.01, self.timer * 0.1 + 0.7)
     Render(self.img, self.x, self.y, 75, 0.4 - self.timer * 0.01, self.timer * 0.1 + 0.7)
@@ -27,12 +31,35 @@ end
 ---@class berry.enemy_base : lstg.object
 EnemyBase = Class(Object)
 
+---@alias EnemyTypes
+---| "fairy"
+---| "kedama"
+---| "yinyang"
+---| "ghost"
+---| nil
+
+---@param style integer
+---@return EnemyTypes
+local function getTypeFromStyle(style)
+    if style <= 18 then
+        return "fairy"
+    elseif style <= 22 then
+        return "kedama"
+    elseif style <= 26 then
+        return "yinyang"
+    elseif style <= 34 then
+        return "ghost"
+    else
+        return nil
+    end
+end
+
 ---@param x number x position
 ---@param y number y position
 ---@param hp number Max hp count
 ---@param invincible boolean Will change the group to NONTJT if true
 ---@param auto_delete boolean Will bound if true
----@param style any
+---@param style integer
 ---@param drop table<any, integer> Table of objects to drop
 function EnemyBase:init(x, y, hp, invincible, auto_delete, style, drop)
     self.damage = EnemyBase.damage
@@ -43,14 +70,22 @@ function EnemyBase:init(x, y, hp, invincible, auto_delete, style, drop)
     else
         self.group = GROUP_ENEMY
     end
+    self.invincible = invincible
     self.x, self.y = x, y
-    self.bound = auto_delete or true
+    self.bound = auto_delete
     self.colli = true
     self.max_hp = hp
     self.hp = hp
     self.servants = {}
     self.style = style
     self.drop = drop or {} -- Format can be : { power_item = 2, point_item = 4 }
+    self.show_hp_count = true
+    ---@type EnemyTypes
+    self.type = getTypeFromStyle(style)
+    self.renderer = nil
+    if self.type ~= nil then
+        self.renderer = nil
+    end
 end
 
 function EnemyBase:frame()
@@ -61,7 +96,10 @@ function EnemyBase:frame()
 end
 
 function EnemyBase:render()
-    -- TODO: Walk img
+    if self.hp < self.max_hp and self.show_hp_count then
+        -- TODO: render text
+    end
+    Render("white", self.x, self.y, self.rot, 0.5)
 end
 
 function EnemyBase:colli(other)
@@ -88,6 +126,9 @@ function EnemyBase:colli(other)
 end
 
 function EnemyBase:damage(dmg)
+    if self.invincible then
+        return
+    end
     dmg = abs(dmg)
     self.hp = clamp(self.hp - dmg, 0, self.max_hp)
 end
@@ -110,3 +151,4 @@ function EnemyBase:del()
 end
 
 lstg.RegisterGameObjectClass(EnemyBase)
+

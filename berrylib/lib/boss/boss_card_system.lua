@@ -3,9 +3,9 @@ local M = {}
 
 ---@param manager berry.boss.boss_manager
 function M:init(manager)
-    ---@type berry.boss.card[]
+    ---@type berry.boss.card[] | berry.boss.card[][]
     self.card_queue = {}
-    ---@type berry.boss.card[]
+    ---@type berry.boss.card[] | berry.boss.card[][]
     self.card_queue_total = {}
     ---@type berry.boss.card
     self.current_card = nil
@@ -48,6 +48,14 @@ function M:addCard(card)
     self.total_card_count = self.total_card_count + 1
 end
 
+---Adds all the cards in `cards` to the card queue.
+---@param cards berry.boss.card[]
+function M:addCardRange(cards)
+    for i = 1, #cards do
+        self:addCard(cards[i])
+    end
+end
+
 ---@return berry.boss.card|nil @The current active card, or nil if there is none.
 function M:getCurrentCard()
     return self.current_card
@@ -80,12 +88,12 @@ function M:goToNext(cast)
         end
 
         while self.current_card.hp > 0 do
-            Task.Wait(1)
+            Task.wait(1)
         end
     end
 
     while self.current_card.hp > 0 do
-        Task.Wait()
+        Task.wait()
     end
 
     self.current_card:beforedel()

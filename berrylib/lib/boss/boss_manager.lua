@@ -51,7 +51,7 @@ end
 ---@param y number Spawn y coords
 ---@param aura any --TODO
 function M:addBoss(name, img, x, y, aura)
-    table.insert(self.bosses, {})
+    table.insert(self.bosses, boss.create(name, img, x, y, aura, self))
 
     self.boss_name = ""
     for k, v in ipairs(self.bosses) do
@@ -91,7 +91,7 @@ function M:foreachBoss(wait, internal_wait, f)
             f(b)
             actions_done = actions_done + 1
         else
-            Task.New(self, function()
+            Task.new(self, function()
                 f(b)
                 actions_done = actions_done + 1
             end)
@@ -99,7 +99,7 @@ function M:foreachBoss(wait, internal_wait, f)
     end
     if wait then
         while actions_done ~= actions_to_do do
-            Task.Wait()
+            Task.wait()
         end
     end
 end
@@ -135,8 +135,59 @@ function M:dealDamage(dmg)
 	self.hit_number = 0 -- Reset for next frame
 end
 
+---Sets the background for all spells of this boss instance.
+---
+---Please do not create the spell instance yourself, just pass the object definition.
+---@param bg berry.boss.bossUI.spellBG
+function M:SetSpellBackground(bg)
+    self.boss_ui.spell_bg = bg.create(self.boss_ui)
+end
+
+---Makes all bosses stay in place and end the boss fight.
+---
+---Please use in the manager Scope.
+---
+---WARNING: The bosses objects will NOT be deleted. Don't use this for midbosses.
+function M:End()
+    Task.wait(30)
+    self.boss_ui:fade_out()
+    Task.wait(60)
+    Del(self)
+end
+
+function M:Leave()
+    self:foreachBoss(false, false, function(b)
+        local ran_x = ran:Int(-300, 300)
+        b:move(ran_x, 400, 60, MOVE_ACC_DEC)
+    end)
+    Task.wait(30)
+    self.boss_ui:fade_out()
+    Task.wait(60)
+    self:foreachBoss(true, false, function(b)
+        Kill(b)
+    end)
+    Del(self)
+end
+
+function M:Explode()
+    self:foreachBoss(false, false, function(b)
+        b:explode()
+    end)
+    Task.wait(30)
+    self.boss_ui:fade_out()
+    Task.wait(60)
+    Del(self)
+end
+
 function M:del()
     lstg.Signals:setStatic("BossEnded", true)
+end
+
+---Creates a new BossManager instance.
+---@nodiscard
+---@return berry.boss.boss_manager
+function M.create()
+    return New(M)
 end
 
 lstg.RegisterGameObjectClass(M)
