@@ -28,6 +28,44 @@ function misc.RenderRing(img, x, y, r1, r2, rot, n, nimg)
     end
 end
 
+Death_Eff = Class(Object)
+function Death_Eff:init(x, y, _type)
+    self.x, self.y = x, y
+    self.type = _type
+    self.size, self.size1 = 0, 0
+    self.layer = LAYER_TOP - 1
+    Task.new(self, function()
+        local size, size1 = 0, 0
+        if self.type == "second" then
+            Task.wait(30)
+        end
+        for _ = 1, 360 do
+            self.size = size
+            self.size1 = size1
+            size = size + 12
+            size1 = size1 + 8
+            Task.wait(1)
+        end
+    end)
+end
+function Death_Eff:frame()
+    Task.Do(self)
+    if self.timer > 180 then
+        Del(self)
+    end
+end
+function Death_Eff:render()
+    if self.type == "first" then
+        render_circle(self.x, self.y, self.size, 60)
+        render_circle(self.x + 35, self.y + 35, self.size1, 60)
+        render_circle(self.x + 35, self.y - 35, self.size1, 60)
+        render_circle(self.x - 35, self.y + 35, self.size1, 60)
+        render_circle(self.x - 35, self.y - 35, self.size1, 60)
+    elseif self.type == "second" then
+        render_circle(self.x, self.y, self.size, 60)
+    end
+end
+
 ---------------------- Screen Shaker
 local Shaker = Class(Object)
 function Shaker:init(time, size)

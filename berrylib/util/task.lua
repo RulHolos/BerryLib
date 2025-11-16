@@ -15,7 +15,7 @@ Task.co = {}
 ---@param target T
 ---@param f fun()
 ---@return thread
-function Task.New(target, f)
+function Task.new(target, f)
     if not target.Tasks then
 ---@diagnostic disable-next-line: inject-field
         target.Tasks = {}
@@ -49,10 +49,39 @@ end
 ---
 ---Must be used in a task context!
 ---@param time_in_frames integer? Time to wait in frames
-function Task.Wait(time_in_frames)
+function Task.wait(time_in_frames)
     time_in_frames = time_in_frames or 1
     time_in_frames = max(1, int(time_in_frames))
     for _ = 1, time_in_frames do
         coroutine.yield()
     end
+end
+
+MOVE_NORMAL = 0
+MOVE_ACCEL = 1
+MOVE_DECEL = 2
+MOVE_ACC_DEC = 3
+
+---Moves an object to a position with a easing mode.
+---@param obj lstg.object
+---@param x number x target position
+---@param y number y target position
+---@param t integer frame time
+---@param mode 0|1|2|3
+function Task.moveToObj(obj, x, y, t, mode)
+    local self = obj
+    t = max(1, int(t))
+
+    ---@type EasingType
+    local easing = "linear"
+    if mode == 1 then
+        easing = "inQuad"
+    elseif mode == 2 then
+        easing = "outQuad"
+    elseif mode == 3 then
+        easing = "inOutQuad"
+    end
+
+    Tween.to(self, { x = x, y = y }, t)
+        :ease(easing)
 end

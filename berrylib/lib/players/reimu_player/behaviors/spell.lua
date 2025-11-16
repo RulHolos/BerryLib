@@ -15,17 +15,17 @@ function reimu_kekkai:init(x, y, dmg, dr, n, t)
     self.n = 0
     self.mute = true
     self.list = {}
-    Task.New(self, function()
+    Task.new(self, function()
         for i = 1, n do
             self.list[i] = { scale = 0, rot = 0 }
             self.n = self.n + 1
-            Task.Wait(t)
+            Task.wait(t)
         end
         self.dmg = 0
         PlaySound("slash", 1.0)
         for i = 128, 0, -4 do
             SetImageState('reimu_kekkai', 'mul+add', Color(0x004040FF) + i * Color(0x01000000))
-			Task.Wait(1)
+			Task.wait(1)
         end
         Del(self)
     end)
@@ -163,8 +163,8 @@ function M:bomb()
     self.bombing = false
 
     self.player.collect_line = self.player.collect_line - 300
-    Task.New(self, function()
-        Task.Wait(90)
+    Task.new(self, function()
+        Task.wait(90)
         self.player.collect_line = self.player.collect_line + 300
     end)
 

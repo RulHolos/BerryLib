@@ -15,47 +15,6 @@ function Death_Eff2:frame()
     end
 end
 
-local Death_Eff = Class(Object)
-
-function Death_Eff:init(x, y, _type)
-    self.x, self.y = x, y
-    self.type = _type
-    self.size, self.size1 = 0, 0
-    self.layer = LAYER_TOP - 1
-    Task.New(self, function()
-        local size, size1 = 0, 0
-        if self.type == "second" then
-            Task.Wait(30)
-        end
-        for _ = 1, 360 do
-            self.size = size
-            self.size1 = size1
-            size = size + 12
-            size1 = size1 + 8
-            Task.Wait(1)
-        end
-    end)
-end
-
-function Death_Eff:frame()
-    Task.Do(self)
-    if self.timer > 180 then
-        Del(self)
-    end
-end
-
-function Death_Eff:render()
-    if self.type == "first" then
-        render_circle(self.x, self.y, self.size, 60)
-        render_circle(self.x + 35, self.y + 35, self.size1, 60)
-        render_circle(self.x + 35, self.y - 35, self.size1, 60)
-        render_circle(self.x - 35, self.y + 35, self.size1, 60)
-        render_circle(self.x - 35, self.y - 35, self.size1, 60)
-    elseif self.type == "second" then
-        render_circle(self.x, self.y, self.size, 60)
-    end
-end
-
 ---@class lstg.Player.Behavior.Death : lstg.Player.Behavior
 local M = {}
 M.name = "Death"

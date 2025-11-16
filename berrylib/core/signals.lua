@@ -170,6 +170,6 @@ end
 ---@param value any
 function Signals:waitForStatic(key, value)
     while self.static[key] ~= value do
-        Task.Wait(1)
+        Task.wait(1)
     end
 end

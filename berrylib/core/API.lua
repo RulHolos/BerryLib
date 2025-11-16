@@ -34,6 +34,7 @@
 ---@field img string Name of the renderable resource on the object.
 ---@field ani integer Animation timer (read_only)
 ---@field is_class boolean Always true.
+---@field dmg integer? BERRY: Optional dmg value
 ---@field init fun(...)
 ---@field del fun(...)
 ---@field frame fun(...)

@@ -44,12 +44,12 @@ function Bullet:init(bullet_type, color, indes)
     self.layer = LAYER_ENEMY_BULLETS - bullet_data[bullet_type][2] + color * 0.00001
     self.wait = 0
 
-    Task.New(self, function()
+    Task.new(self, function()
         for i = 1, 12 do
             self._a = i * 255 / 12
             self.hscale = (12 - i) / 12 + 0.5 + bullet_data[bullet_type][2]
             self.vscale = (12 - i) / 12 + 0.5 + bullet_data[bullet_type][2]
-            Task.Wait()
+            Task.wait()
         end
         self.colli = true
     end)
@@ -127,8 +127,8 @@ function Bullet.fire(bullet_type, color, x, y, v, ang, aim, indes, wait)
     if wait then
         b.rot = ang
         b.wait = wait
-        Task.New(b, function()
-            Task.Wait(wait)
+        Task.new(b, function()
+            Task.wait(wait)
             if IsValid(b) then
                 SetV(b, v, ang, true)
             end

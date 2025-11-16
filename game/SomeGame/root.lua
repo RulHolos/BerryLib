@@ -8,7 +8,7 @@ function test_scene:init()
 
     New(ReimuPlayer)
 
-    --[[Task.New(self, function()
+    --[[Task.new(self, function()
         for col = 1, 16 do
             local i = 210
             for k, v in pairs(bullet_data) do
@@ -18,17 +18,21 @@ function test_scene:init()
         end
     end)]]
 
-    Task.New(self, function()
+    Task.new(self, function()
         local col = 1
         for _ = 0, INF do
             --Bullet.fire("arrow_big", col, 0, 0, 1.8, 0, true)
-            New(item_power, -100, 120)
-            New(item_power_large, -50, 120)
-            New(item_power_full, 50, 120)
-            New(item_point, 100, 120)
-            Task.Wait(30)
+            New(item_power, -100, 200)
+            New(item_power_large, -50, 200)
+            New(item_power_full, 50, 200)
+            New(item_point, 100, 200)
+
+            Bullet.fire("arrow_big", Bullet.COLOR.RED, 0, 0, 1.8, 0, false, false, 0)
+            Task.wait(30)
 
             col = wrap(col + 1, 1, 16)
         end
     end)
+
+    New(EnemyBase, 0, 120, 1000, true, false, 14, {})
 end

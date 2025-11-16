@@ -22,10 +22,10 @@ function M:init()
     self.move_speed = 0.3
     self.change_focus_speed = 0.2 -- Different impact than move_speed because it's a progress value step.
 
-    ---@type fun(t:integer)
-    self.move_function = easing.linear
-    ---@type fun(t:integer)
-    self.change_focus_function = easing.linear
+    ---@type EasingType
+    self.move_function = "linear"
+    ---@type EasingType
+    self.change_focus_function = "linear"
 
     self._focus_change_entries = {}
     self._focus_changing = false
@@ -91,7 +91,7 @@ function M:frame()
     end
 
     local t = self.move_speed
-    local ease_t = self.move_function(t) or t
+    local ease_t = (easing[self.move_function] or easing.linear)(t) or t
 
     for i = 1, #src do
         if not (self._focus_changing and self._focus_change_entries[i]) then
@@ -156,7 +156,7 @@ function M:updateFocusChange()
     for i, entry in pairs(self._focus_change_entries) do
         entry.progress = math.min(1, entry.progress + self.change_focus_speed)
         local p = entry.progress
-        local eased = self.change_focus_function(p) or p
+        local eased = (easing[self.change_focus_function] or easing.linear)(p) or p
 
         local target_x = self.player.x + entry.offx
         local target_y = self.player.y + entry.offy
