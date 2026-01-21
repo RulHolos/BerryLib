@@ -87,7 +87,9 @@ local S = {
     del = function() end,
     timer = 0,
     ---@type Menu.Manager?
-    menu_manager = nil
+    menu_manager = nil,
+    ---@type Background
+    bg = BG_Temple
 }
 
 --------------------------------------
@@ -179,8 +181,9 @@ function SG:reset()
 end
 
 ---@param name string
+---@param bg Background? background object of this stage.
 ---@return Scene
-function SG:newScene(name)
+function SG:newScene(name, bg)
     ---@type Scene
     local scene = {
         type = "scene",
@@ -191,7 +194,8 @@ function SG:newScene(name)
         name = name,
         is_menu = false,
         timer = 0,
-        menu_manager = nil
+        menu_manager = nil,
+        bg = bg or BG_Temple,
     }
 
     scene = self:addScene(scene)
@@ -288,7 +292,7 @@ end
 
 ---@param name string The name of the next scene to load.
 function M.setNextScene(name)
-    for k, v in pairs(M.scenes) do
+    for _, v in pairs(M.scenes) do
         if v.name == name then
             M.next_scene = M.scenes[name]
             break
@@ -311,6 +315,18 @@ function M.stopCurrentScene()
     return destroying_scene
 end
 
+---@param scene Scene
+function M.setupStageScene(scene)
+    if M.current_scene.bg then
+        New(M.current_scene.bg)
+    end
+    -- TODO: Player choosing system
+    --if PlayerSystem.chosen_player then
+    --    New(PlayerSystem.chosen_player)
+    --end
+    New(ReimuPlayer)
+end
+
 function M.createNextScene()
     local got_loaded = false
     lstg.SetResourceStatus("stage")
@@ -326,6 +342,9 @@ function M.createNextScene()
         M.current_scene = next_scene
         M.current_scene.timer = 0
         M.current_scene:init()
+        if not M.current_scene.is_menu then
+            M.setupStageScene(M.current_scene)
+        end
         got_loaded = true
     elseif M.next_scene.type == "group" then -- M.next_scene is the same object during the entire lifetime of the group.
 ---@diagnostic disable-next-line : assign-type-mismatch
@@ -347,6 +366,9 @@ function M.createNextScene()
             M.current_scene = scene
             M.current_scene.timer = 0
             M.current_scene:init()
+            if not M.current_scene.is_menu then
+                M.setupStageScene(M.current_scene)
+            end
 
             -- For next time it's used.
             M.current_group.current_scene_index = M.current_group.current_scene_index + 1
@@ -400,6 +422,11 @@ end
 --------------------------------------
 --- Initialization
 
+lstg.Signals:register("GameInit", "SceneManager:init", function()
+    if SceneManager.next_scene == nil then
+        error("No entry point scene defined.")
+    end
+end)
 lstg.Signals:register("frame", "SceneManager:frame", M.frame, 999)
 lstg.Signals:register("render", "SceneManager:render", M.render, 999)
 

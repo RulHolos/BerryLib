@@ -2,10 +2,18 @@
 Boss Manager System
 
 This whole class file is meant to be overriden by objected inherited from it.
-In C#, `berry.boss.boss_manager` would be considered an abstract class but I have no way to tell the lua lang server that it is.
+In C#, `berry.boss.boss_manager` would be considered an abstract class but I have no way to tell the lua
+lang server that it is.
+
+This class can be inherited to work with the editor nicely but also can work without being abstract.
+
+Warning: This class and all it implements isn't meant to be modified using the editor. The boss object code, ui and all
+is hidden from the editor. If you want to modify how the UI for the boss looks or its WalkImage system, you will need
+to get your hands dirty on this code.
 ]]
 
 local boss = require("berrylib.lib.boss.boss")
+local bossui = require("berrylib.lib.boss.boss_ui")
 local card_system = require("berrylib.lib.boss.boss_card_system")
 
 ---@class berry.boss.boss_manager : lstg.object
@@ -13,6 +21,7 @@ local M = Class(Object)
 BossManager = M
 
 function M:init()
+    lstg.var.boss_manager = self
     lstg.Signals:setStatic("BossEnded", false)
 
     self.addBoss = M.addBoss
@@ -21,11 +30,16 @@ function M:init()
     self.foreachBoss = M.foreachBoss
     self.scope = M.scope
     self.dealDamage = M.dealDamage
+    self.setSpellBackground = M.setSpellBackground
+    self.endBoss = M.endBoss
+    self.explode = M.explode
+    self.leave = M.leave
 
     ---@type berry.boss.boss[]
     self.bosses = {}
     self.card_system = card_system.create(self)
-    self.boss_ui = nil -- TODO
+    ---@type berry.boss.ui
+    self.boss_ui = bossui.create(self)
 
     ---@type integer Number of boss objects currently taking damage (dmg / hit_number)
     self.hit_number = 0
@@ -139,7 +153,7 @@ end
 ---
 ---Please do not create the spell instance yourself, just pass the object definition.
 ---@param bg berry.boss.bossUI.spellBG
-function M:SetSpellBackground(bg)
+function M:setSpellBackground(bg)
     self.boss_ui.spell_bg = bg.create(self.boss_ui)
 end
 
@@ -148,14 +162,14 @@ end
 ---Please use in the manager Scope.
 ---
 ---WARNING: The bosses objects will NOT be deleted. Don't use this for midbosses.
-function M:End()
+function M:endBoss()
     Task.wait(30)
     self.boss_ui:fade_out()
     Task.wait(60)
     Del(self)
 end
 
-function M:Leave()
+function M:leave()
     self:foreachBoss(false, false, function(b)
         local ran_x = ran:Int(-300, 300)
         b:move(ran_x, 400, 60, MOVE_ACC_DEC)
@@ -169,7 +183,7 @@ function M:Leave()
     Del(self)
 end
 
-function M:Explode()
+function M:explode()
     self:foreachBoss(false, false, function(b)
         b:explode()
     end)

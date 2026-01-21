@@ -82,6 +82,7 @@ function Task.moveToObj(obj, x, y, t, mode)
         easing = "inOutQuad"
     end
 
-    Tween.to(self, { x = x, y = y }, t)
+    local tw = Tween.to(self, { x = x, y = y }, t)
         :ease(easing)
+    Tween.wait(tw)
 end

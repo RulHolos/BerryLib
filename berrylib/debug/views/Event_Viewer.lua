@@ -39,6 +39,8 @@ function Event_Viewer:layoutDynamicSignals()
         for k, v in pairs(lstg.Signals.entries) do
             if ImGui.TreeNode(k) then
                 for i, entry in ipairs(v) do
+                    _, entry.enabled = ImGui.Checkbox("##" .. i .. "_enabled?", entry.enabled)
+                    ImGui.SameLine()
                     ImGui.Text(("%d. %s (priority: %d%s)"):format(i, entry.id or "<no id>", entry.priority or 0, entry.once and ", once" or ""))
                 end
                 ImGui.TreePop()

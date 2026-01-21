@@ -8,6 +8,7 @@ M.resdesc = {
     { name = "ui:hint", type = "tex", args = {"ui/hint.png", true} },
     { name = "ui:hint:hiscore", type = "img", args = {"ui:hint", 424, 8, 80, 20} },
     { name = "ui:hint:score", type = "img", args = {"ui:hint", 424, 30, 64, 20} },
+    { name = "ui:boss_ui", type = "tex", args = {"ui/boss_ui.png", true} },
 }
 
 function M.postLoad()

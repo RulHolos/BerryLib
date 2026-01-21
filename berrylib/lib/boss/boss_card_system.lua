@@ -17,10 +17,13 @@ function M:init(manager)
 
     ---@type integer Total spell count, counting deleted ones. (Mainly for UI)
     self.total_card_count = 0
+
+    self.last_defeated_boss = nil
 end
 
 function M:frame()
     if self.current_card then
+        Task.Do(self.current_card)
         self.current_card:frame()
         self.current_card.timer = self.current_card.timer + 1
         self.current_card.timer_time = max(0, self.current_card.timer_time - 1)

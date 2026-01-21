@@ -38,7 +38,9 @@ function Tween:frame()
         local startValue = self.from[key]
         local value = startValue + (targetValue - startValue) * k
         self.target[key] = value
-        self.onFrameFn(key, value)
+        for k, _ in ipairs(self.onFrameFn) do
+            self.onFrameFn[k](key, value)
+        end
     end
 
     self.timer = self.timer + 1
@@ -54,8 +56,8 @@ function Tween:frame()
             self.timer = 0
         else
             self.finished = true
-            if self.onCompleteFn then
-                self.onCompleteFn()
+            for k, _ in ipairs(self.onCompleteFn) do
+                self.onCompleteFn[k]()
             end
         end
     end
@@ -105,6 +107,14 @@ function Tween.get(target, id)
         end
     end
     return nil
+end
+
+---Waits until the tween is finished.
+---@param tween lstg.Tween
+function Tween.wait(tween)
+    while not tween.finished do
+        Task.wait()
+    end
 end
 
 -- ============= --

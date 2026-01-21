@@ -1,5 +1,5 @@
 ---@class berry.boss.boss : berry.enemy_base
-local M = Class(EnemyBase)
+local M = Class(Object)
 
 ---@param name string Full name of the boss
 ---@param img string Image name of the boss
@@ -41,7 +41,7 @@ function M:frame()
 end
 
 function M:render()
-    Render(self.img, self.y, self.y + cos(self.timer) * 4, 0, 0.06)
+    Render(self.img, self.x, self.y + cos(self.timer) * 4, 0)
 end
 
 function M:kill()
@@ -109,12 +109,10 @@ function M:wander(time, move_mode)
         diry = -1
     end
 
-    Task.moveToObj(self, self.x + dx * dirx, self.y + dy * diry, time, move_mode)
+    self:move(self.x + dx * dirx, self.y + dy * diry, time, move_mode)
 end
 
-function M:explode()
-    --#region Effects
-
+--#region Effects
     local boss_death_ef_unit = Class(Object)
     function boss_death_ef_unit:init(x, y, v, angle, lifetime, size)
         self.x, self.y = x, y
@@ -156,7 +154,9 @@ function M:explode()
         Del(self)
     end
 
-    --#endregion
+--#endregion
+
+function M:explode()
     local angle = ran:Float(-15, 15)
     local sign = ran:Sign()
     local velocity = 1.5

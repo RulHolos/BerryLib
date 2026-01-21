@@ -1,23 +1,8 @@
-local bullet_data = require("assets.bullets").data.bullet_data
+local marisa = require("lib.boss.marisa_boss.marisa")
 
 local last_cg = SceneManager.newGroup("Normal", 1, false, {}, true)
-
-local test_scene = last_cg:newScene("test_entry")
+local test_scene = last_cg:newScene("test_entry", BG_Temple)
 function test_scene:init()
-    New(BG_Temple)
-
-    New(ReimuPlayer)
-
-    --[[Task.new(self, function()
-        for col = 1, 16 do
-            local i = 210
-            for k, v in pairs(bullet_data) do
-                Bullet.fire(k, col, -185 + (col * 15), i, 0, 0)
-                i = i - 13
-            end
-        end
-    end)]]
-
     Task.new(self, function()
         local col = 1
         for _ = 0, INF do
@@ -34,5 +19,7 @@ function test_scene:init()
         end
     end)
 
-    New(EnemyBase, 0, 120, 1000, true, false, 14, {})
+    Task.new(self, function()
+        marisa.boss()
+    end)
 end

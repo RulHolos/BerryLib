@@ -8,6 +8,7 @@ Include("lib/menu/LoadingScene.lua")
 Include("lib/bullets/bullet.lua")
 Include("lib/enemies/enemy_base.lua")
 Include("lib/items.lua")
+Include("lib/boss/boss_manager.lua")
 
 ---
 lstg.plugin.DispatchEvent("afterLib")

@@ -5,23 +5,12 @@
 ---@class lstg
 lstg = lstg or {}
 
-lstg.DoFile("core/math.lua")
-lstg.DoFile("core/random.lua")
-lstg.DoFile("core/log.lua")
-lstg.DoFile("core/signals.lua")
-lstg.DoFile("core/objects.lua")
-lstg.DoFile("core/resources.lua")
-lstg.DoFile("core/plugin.lua")
-lstg.DoFile("core/graphics.lua")
-lstg.DoFile("core/resources_types.lua")
-lstg.DoFile("core/input.lua")
-lstg.DoFile("core/scene.lua")
-lstg.DoFile("core/global.lua")
+lstg.DoFile("core/_core.lua")
 
-lstg.DoFile("backgrounds/bgs.lua")
+Include("backgrounds/bgs.lua")
 
-lstg.DoFile("util/util.lua")
-lstg.DoFile("lib/lib.lua")
+Include("util/util.lua")
+Include("lib/lib.lua")
 
 ---@type lstg.debug.manager
 Include("debug/view.lua")
@@ -41,6 +30,26 @@ function GameExists()
     return Settings.Game ~= nil
 end
 
+lstg.Signals:register("frame", "gameplayFrame", function()
+    ObjFrame()
+    BoundCheck()
+    CollisionCheck(GROUP_PLAYER, GROUP_ENEMY_BULLET)
+    CollisionCheck(GROUP_PLAYER, GROUP_ENEMY)
+    CollisionCheck(GROUP_PLAYER, GROUP_BOSS)
+    CollisionCheck(GROUP_PLAYER, GROUP_INDES)
+    CollisionCheck(GROUP_ENEMY, GROUP_PLAYER_BULLET)
+    CollisionCheck(GROUP_BOSS, GROUP_PLAYER_BULLET)
+    CollisionCheck(GROUP_NONTJT, GROUP_PLAYER_BULLET)
+    CollisionCheck(GROUP_ITEM, GROUP_PLAYER)
+
+    UpdateXY()
+    AfterFrame()
+end, -1)
+
+lstg.Signals:register("render", "gameplayRender", function()
+    ObjRender()
+end, 999)
+
 -- ======================== --
 -- Engine defined functions --
 -- ======================== --
@@ -58,10 +67,6 @@ function GameInit()
 
     lstg.plugin.DispatchEvent("afterGame")
     lstg.Signals:emit("GameInit")
-
-    if SceneManager.next_scene == nil then
-        error("No entry point scene defined.")
-    end
 end
 
 function FrameFunc()
@@ -78,37 +83,21 @@ function FrameFunc()
 
     lstg.Signals:emit("frame")
 
-    ObjFrame()
-    BoundCheck()
-    CollisionCheck(GROUP_PLAYER, GROUP_ENEMY_BULLET)
-    CollisionCheck(GROUP_PLAYER, GROUP_ENEMY)
-    CollisionCheck(GROUP_PLAYER, GROUP_BOSS)
-    CollisionCheck(GROUP_PLAYER, GROUP_INDES)
-    CollisionCheck(GROUP_ENEMY, GROUP_PLAYER_BULLET)
-    CollisionCheck(GROUP_BOSS, GROUP_PLAYER_BULLET)
-    CollisionCheck(GROUP_NONTJT, GROUP_PLAYER_BULLET)
-    CollisionCheck(GROUP_ITEM, GROUP_PLAYER)
-
-    UpdateXY()
-    AfterFrame()
-
     ImGuiManager:layout()
 
     return quitFlag
 end
 
-function RenderFunc()
-    lstg.BeginScene()
+function GameExit()
+end
 
-    if SceneManager.current_scene then
-       SceneManager.current_scene:render()
-    end
-    lstg.ObjRender()
+function RenderFunc()
+    BeginScene()
 
     lstg.Signals:emit("render")
 
     ImGuiManager:render()
-    lstg.EndScene()
+    EndScene()
 
     if KeyIsPressed("Snapshot") then
         lstg.LocalUserData.Snapshot()

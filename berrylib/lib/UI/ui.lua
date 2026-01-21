@@ -143,6 +143,7 @@ local patch = "lib/UI/components/"
 Include(patch .. "lines.lua")
 Include(patch .. "frame.lua")
 Include(patch .. "score.lua")
+Include(patch .. "boss_pointer.lua")
 
 --=====================--
 --- Signals Callbacks ---
