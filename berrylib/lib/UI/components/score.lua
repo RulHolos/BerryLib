@@ -29,7 +29,7 @@ local function RenderScore(fontname, score, x, y, size, mode)
 end
 
 function M:ScoreUpdate()
-    local cur_score = lstg.var.score
+    local cur_score = int(lstg.var.score)
     local score = self.score or cur_score
     local score_tmp = self.score_tmp or cur_score
     if score_tmp < cur_score then
@@ -50,7 +50,7 @@ function M:ScoreUpdate()
         score = cur_score
     end
 
-    self.score = score
+    self.score = int(score)
     self.score_tmp = score_tmp
 end
 
